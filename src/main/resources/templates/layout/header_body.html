@@ -1,0 +1,150 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<th:block th:fragment="headerBody">
+<div id="headerMain" class="d-none">
+    <header id="header" style="background-color: #4a4a4a;"
+            class="navbar navbar-expand-lg navbar-fixed navbar-height navbar-flush navbar-container navbar-bordered">
+        <div class="navbar-nav-wrap">
+            <div class="navbar-brand-wrapper">
+            </div>
+
+            <div class="navbar-nav-wrap-content-left">
+                <!-- Navbar Vertical Toggle -->
+                <button type="button" class="js-navbar-vertical-aside-toggle-invoker close mr-3">
+                    <i class="tio-first-page navbar-vertical-aside-toggle-short-align" data-toggle="tooltip"
+                       data-placement="right" title="Collapse"></i>
+                    <i class="tio-last-page navbar-vertical-aside-toggle-full-align"
+                       data-template='<div class="tooltip d-none d-sm-block" role="tooltip"><div class="arrow"></div><div class="tooltip-inner"></div></div>'
+                       data-toggle="tooltip" data-placement="right" title="Expand"></i>
+                </button>
+                <!-- End Navbar Vertical Toggle -->
+
+                <!-- Search Form -->
+                <div class="d-none d-md-block">
+                    <form class="position-relative">
+                        <!-- Input Group -->
+                        <div
+                                class="input-group input-group-merge input-group-borderless input-group-hover-light navbar-input-group">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">
+                                    <i class="tio-search"></i>
+                                </div>
+                            </div>
+                            <input type="search" class="js-form-search form-control" placeholder="Search in front"
+                                   aria-label="Search in front" data-hs-form-search-options='{
+                     "clearIcon": "#clearSearchResultsIcon",
+                     "dropMenuElement": "#searchDropdownMenu",
+                     "dropMenuOffset": 20,
+                     "toggleIconOnFocus": true,
+                     "activeClass": "focus"
+                   }'>
+                            <a class="input-group-append" href="javascript:;">
+                  <span class="input-group-text">
+                    <i id="clearSearchResultsIcon" class="tio-clear" style="display: none;"></i>
+                  </span>
+                            </a>
+                        </div>
+                        <!-- End Input Group -->
+                    </form>
+                </div>
+                <!-- End Search Form -->
+            </div>
+
+            <!-- Secondary Content -->
+            <div class="navbar-nav-wrap-content-right">
+                <!-- Navbar -->
+                <ul class="navbar-nav align-items-center flex-row">
+                    <li class="nav-item d-none d-sm-inline-block">
+                        <!-- Notification -->
+                        <div class="hs-unfold">
+                            <a class="js-hs-unfold-invoker btn btn-icon btn-ghost-secondary rounded-circle" href="javascript:;"
+                               data-hs-unfold-options='{
+                                         "target": "#notificationDropdown",
+                                         "type": "css-animation"
+                                       }'>
+                                <i class="tio-notifications-on-outlined" style="color: white;"></i>
+                                <span class="btn-status btn-sm-status btn-status-danger"></span>
+                            </a>
+
+                            <div id="notificationDropdown"
+                                 class="hs-unfold-content dropdown-unfold dropdown-menu dropdown-menu-right navbar-dropdown-menu"
+                                 style="width: 25rem;">
+                                <!-- Header -->
+                                <div class="card-header">
+                                    <span class="card-title h4">Notifications</span>
+                                </div>
+                                <!-- End Header -->
+
+
+                                <!-- End Nav -->
+
+                                <!-- Body -->
+                                <div class="card-body-height">
+
+                                </div>
+                                <!-- End Body -->
+                            </div>
+                        </div>
+                        <!-- End Notification -->
+                    </li>
+                    <li class="nav-item">
+                        <!-- Account -->
+                        <div class="hs-unfold">
+                            <a class="js-hs-unfold-invoker navbar-dropdown-account-wrapper" href="javascript:;"
+                               data-hs-unfold-options='{
+                                             "target": "#accountNavbarDropdown",
+                                             "type": "css-animation"
+                                           }'>
+                                <div class="avatar avatar-sm avatar-circle">
+                                    <img class="avatar-img" th:src="@{|/images/avatar/${admin.avatar}|}" alt="Image Description">
+                                    <span class="avatar-status avatar-sm-status avatar-status-success"></span>
+                                </div>
+                            </a>
+
+                            <div id="accountNavbarDropdown"
+                                 class="hs-unfold-content dropdown-unfold dropdown-menu dropdown-menu-right navbar-dropdown-menu navbar-dropdown-account"
+                                 style="width: 16rem;">
+                                <div class="dropdown-item-text">
+                                    <div class="media align-items-center">
+                                        <div class="avatar avatar-sm avatar-circle mr-2">
+                                            <img class="avatar-img" th:src="@{|/images/avatar/${admin.avatar}|}" alt="Image Description">
+                                        </div>
+                                        <input type="hidden" th:value="${admin.username}" id="usernameAdmin">
+                                        <div class="media-body">
+                                            <span class="card-title h5" th:utext="${admin.fullName}"></span>
+                                            <span class="card-text" th:utext="${admin.email}"></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="dropdown-divider"></div>
+
+                                <a class="dropdown-item profileAdmin" href="#" style="margin: 0; padding: 0">
+                                    <button class="profile-admin" th:data-id="${admin.id}">
+                                        Profile
+                                    </button>
+                                </a>
+
+                                <a class="dropdown-item" href="/logout">
+                                    <span class="text-truncate pr-2" title="Sign out">Sign out</span>
+                                </a>
+                            </div>
+                        </div>
+                        <!-- End Account -->
+                    </li>
+                </ul>
+                <!-- End Navbar -->
+            </div>
+            <!-- End Secondary Content -->
+        </div>
+    </header>
+</div>
+<div id="headerFluid" class="d-none">
+    <header id="headerF"
+            class="navbar navbar-expand-xl navbar-fixed navbar-height navbar-flush navbar-container navbar-bordered  ">
+    </header>
+</div>
+<div id="headerDouble" class="d-none">
+    <header id="headerD" class="navbar navbar-expand-lg navbar-bordered flex-lg-column px-0">
+    </header>
+</div>
+</th:block>

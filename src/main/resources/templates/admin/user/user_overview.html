@@ -1,0 +1,1509 @@
+﻿<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+
+<head>
+    <title>Model Shop</title>
+    <th:block th:replace="/layout/head :: head"/>
+</head>
+
+<body class="footer-offset">
+<th:block th:replace="/layout/builder :: builder"/>
+
+<th:block th:replace="/layout/header_body :: headerBody"/>
+
+<th:block th:replace="/layout/left_bar :: leftBar"/>
+
+
+<main id="content" role="main" class="main">
+
+    <!--    Show error-->
+    <div class="modal-alert-danger hide" id="mainErr"></div>
+    <!-- Content -->
+    <div class="content container-fluid">
+        <!-- Page Header -->
+        <div class="page-header">
+            <div class="row align-items-end">
+                <div class="col-sm mb-2 mb-sm-0">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb breadcrumb-no-gutter">
+                            <li class="breadcrumb-item"><a class="breadcrumb-link" href="javascript:;">Admin</a></li>
+                            <li class="breadcrumb-item"><a class="breadcrumb-link" href="javascript:;">User</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Overview</li>
+                        </ol>
+                    </nav>
+
+                    <h1 class="page-header-title">Users</h1>
+                </div>
+
+                <div class="col-sm-auto">
+                    <button class="btn btn-primary btnCreate">
+                        <i class="tio-user-add mr-1"></i> Add Admin
+                    </button>
+                </div>
+            </div>
+            <!-- End Row -->
+        </div>
+        <!-- End Page Header -->
+
+        <!-- Stats -->
+        <div class="row gx-2 gx-lg-3">
+            <div class="col-sm-6 col-lg-3 mb-3 mb-lg-5">
+                <!-- Card -->
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h6 class="card-subtitle mb-2">Total users</h6>
+
+                        <div class="row align-items-center gx-2">
+                            <div class="col">
+                                <span class="js-counter display-4 text-dark">24</span>
+                                <span class="text-body font-size-sm ml-1">from 22</span>
+                            </div>
+
+                            <div class="col-auto">
+                  <span class="badge badge-soft-success p-1">
+                    <i class="tio-trending-up"></i> 5.0%
+                  </span>
+                            </div>
+                        </div>
+                        <!-- End Row -->
+                    </div>
+                </div>
+                <!-- End Card -->
+            </div>
+
+            <div class="col-sm-6 col-lg-3 mb-3 mb-lg-5">
+                <!-- Card -->
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h6 class="card-subtitle mb-2">Active members</h6>
+
+                        <div class="row align-items-center gx-2">
+                            <div class="col">
+                                <span class="js-counter display-4 text-dark">12</span>
+                                <span class="text-body font-size-sm ml-1">from 11</span>
+                            </div>
+
+                            <div class="col-auto">
+                  <span class="badge badge-soft-success p-1">
+                    <i class="tio-trending-up"></i> 1.2%
+                  </span>
+                            </div>
+                        </div>
+                        <!-- End Row -->
+                    </div>
+                </div>
+                <!-- End Card -->
+            </div>
+
+            <div class="col-sm-6 col-lg-3 mb-3 mb-lg-5">
+                <!-- Card -->
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h6 class="card-subtitle mb-2">New/returning</h6>
+
+                        <div class="row align-items-center gx-2">
+                            <div class="col">
+                                <span class="js-counter display-4 text-dark">56</span>
+                                <span class="display-4 text-dark">%</span>
+                                <span class="text-body font-size-sm ml-1">from 48.7</span>
+                            </div>
+
+                            <div class="col-auto">
+                  <span class="badge badge-soft-danger p-1">
+                    <i class="tio-trending-down"></i> 2.8%
+                  </span>
+                            </div>
+                        </div>
+                        <!-- End Row -->
+                    </div>
+                </div>
+                <!-- End Card -->
+            </div>
+
+            <div class="col-sm-6 col-lg-3 mb-3 mb-lg-5">
+                <!-- Card -->
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h6 class="card-subtitle mb-2">Active members</h6>
+
+                        <div class="row align-items-center gx-2">
+                            <div class="col">
+                                <span class="js-counter display-4 text-dark">28.6</span>
+                                <span class="display-4 text-dark">%</span>
+                                <span class="text-body font-size-sm ml-1">from 28.6%</span>
+                            </div>
+
+                            <div class="col-auto">
+                                <span class="badge badge-soft-secondary p-1">0.0%</span>
+                            </div>
+                        </div>
+                        <!-- End Row -->
+                    </div>
+                </div>
+                <!-- End Card -->
+            </div>
+        </div>
+        <!-- End Stats -->
+
+        <!-- Card -->
+        <div class="card">
+            <!-- Header -->
+            <div class="card-header">
+                <div class="row justify-content-between align-items-center flex-grow-1">
+                    <div class="col-sm-6 col-md-4 mb-3 mb-sm-0">
+                        <form>
+                            <!-- Search -->
+                            <div class="input-group input-group-merge input-group-flush">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <i class="tio-search"></i>
+                                    </div>
+                                </div>
+                                <input id="datatableSearch" type="search" class="form-control"
+                                       placeholder="Search users"
+                                       aria-label="Search users">
+                            </div>
+                            <!-- End Search -->
+                        </form>
+                    </div>
+                </div>
+                <!-- End Row -->
+            </div>
+            <!-- End Header -->
+
+            <!-- Table -->
+            <div class="table-responsive datatable-custom">
+                <table id="table-user"
+                       class="table table-lg table-borderless table-thead-bordered table-nowrap table-align-middle card-table">
+                    <thead class="thead-light">
+                    <tr>
+                        <th class="table-column-pl-0 text-center">Name</th>
+                        <th>Username</th>
+                        <th>Phone</th>
+                        <th>Coin (VND)</th>
+                        <th>Status</th>
+                        <th class="text-center">Action</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+            <!-- End Table -->
+        </div>
+        <!-- End Card -->
+    </div>
+    <!-- End Content -->
+
+    <!-- Footer -->
+
+    <th:block th:replace="/layout/footer :: footer"/>
+
+    <!-- End Footer -->
+
+    <!--    Modal start -->
+
+    <th:block th:replace="/layout/modal/user/admin_profile :: admin_profile"/>
+
+    <th:block th:replace="/layout/modal/user/user_deposit :: user_deposit"/>
+
+    <th:block th:replace="/layout/modal/user/admin_create :: admin_create"/>
+
+    <th:block th:replace="/layout/modal/user/user_block :: user_block"/>
+
+    <th:block th:replace="/layout/modal/user/user_active :: user_active"/>
+
+</main>
+<!-- ========== END MAIN CONTENT ========== -->
+<th:block th:replace="/layout/script :: script"/>
+<script src="/assets/js/model.js"></script>
+<script src="/assets/js/app.page.js"></script>
+<script>
+    let page = {
+        urls: {
+            getAllUsers: App.BASE_URL_USER
+        }
+    }
+
+    let user = new User();
+
+    function init() {
+        getAllUsers();
+        selectAddressToCreate();
+        initTooltip();
+    }
+
+    init();
+
+    // tooltip for action
+    function initTooltip() {
+        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+    }
+
+    function getAllUsers() {
+        $.ajax({
+            headers: {
+                "accept": "application/json",
+                "content-type": "application/json"
+            },
+            type: "GET",
+            url: page.urls.getAllUsers
+        })
+            .done((data) => {
+                showListUser(data);
+
+            })
+            .fail((jqXHR) => {
+                $('#table-user tbody').empty();
+
+                console.log(jqXHR.responseJSON);
+                if (jqXHR.responseJSON.message) {
+                    let message = jqXHR.responseJSON.message;
+
+                    let str = `<td colspan="6" id="message-error" class="error text-center" >${message}</td>`;
+
+                    $("#table-user tbody").append(str);
+                }
+            })
+    }
+
+    function getUserById(id) {
+
+        return $.ajax({
+            headers: {
+                "Accept": "application/json",
+                "Content-type": "application/json"
+            },
+            type: "GET",
+            url: 'http://localhost:8080/api/users/' + id
+        })
+            .done((data) => {
+                user = data;
+            })
+            .fail((jqXHR) => {
+                console.log(jqXHR);
+                $('#mainErr').empty();
+
+                $("#mainErr").addClass('show').removeClass('hide');
+
+                if (jqXHR.responseJSON.message) {
+                    let message = jqXHR.responseJSON.message;
+                    console.log(message);
+
+                    Swal.fire({
+                        title: message,
+                        icon: 'warning',
+                        showConfirmButton: false,
+                        timer: 2000
+                    })
+                }
+            });
+    }
+
+    function getUserByIdCheckBlock(id) {
+        return $.ajax({
+            headers: {
+                "Accept": "application/json",
+                "Content-type": "application/json"
+            },
+            type: "GET",
+            url: 'http://localhost:8080/api/users/check-block/' + id
+        })
+            .done((data) => {
+                user = data;
+            })
+            .fail((jqXHR) => {
+                console.log(jqXHR);
+                $('#mainErr').empty();
+
+                $("#mainErr").addClass('show').removeClass('hide');
+
+                if (jqXHR.responseJSON.message) {
+                    let message = jqXHR.responseJSON.message;
+                    console.log(message);
+
+                    Swal.fire({
+                        title: message,
+                        icon: 'warning',
+                        showConfirmButton: false,
+                        timer: 2000
+                    })
+
+                    // let str = `<label id="message-error" class="error" for="message">${message}</label>`;
+                    //
+                    // $("#mainErr").append(str);
+                }
+            });
+    }
+
+
+    //  Show list user
+    function showListUser(data) {
+        $.each(data, (i, item) => {
+            user = item;
+            let str = `
+            <tr id="tr_${user.id}">
+                <td class="table-column-pl-0 text-center">
+                  <a class="d-flex align-items-start" style="margin-left: 30px;" href="user-profile.html">
+                    <div class="avatar avatar-soft-primary avatar-circle">
+                      <img class="avatar-initials" src="/images/avatar/${user.avatar}">
+                    </div>
+                    <div class="ml-3" style="text-align: left;">
+                      <span class="d-block h5 text-hover-primary mb-0">${user.fullName}</span>
+                      <span class="d-block font-size-sm text-body">${user.email}</span>
+                    </div>
+                  </a>
+                </td>
+                <td>
+                  <span class="d-block h5 mb-0">${user.username}</span>
+                </td>
+                <td>${user.phone}</td>
+                <td>
+                  ${formatCash(user.coin)}
+                </td>
+                <td>
+                  <div class="d-flex align-items-center" id="status">
+                    ${checkStatus(user.blocked)}
+                  </div>
+                </td>
+                <td class="text-center">
+                  <button class="btn btn-sm btn-outline-primary deposit" data-id="${user.id}" data-bs-toggle="tooltip"
+                                    data-bs-placement="top" data-bs-title="Coin">
+                    <i class="tio-coin"></i> Coin
+                  </button>
+
+                  ${checkAction(user.blocked, user.id)}
+
+                  <button class="btn btn-sm btn-outline-danger remove" data-id="${user.id}" data-bs-toggle="tooltip"
+                                    data-bs-placement="top" data-bs-title="Remove">
+                    <i class="fa fa-trash-o" aria-hidden="true"></i> Remove
+                  </button>
+                </td>
+            </tr>
+        `;
+
+            $("#table-user tbody").prepend(str);
+
+            handleShowModal();
+        });
+    }
+
+    //Remove even show
+    function removeEventShowModal() {
+        $(".deposit").off();
+        $(".blocked").off();
+        $(".actived").off();
+    }
+
+    // handle show Modal
+    function handleShowModal() {
+        removeEventShowModal();
+
+        handleShowModalAddAdmin();
+        handleShowDepositModal();
+        handleShowBlock();
+        handleShowActive();
+        handleShowRemove();
+
+        handleShowProfileAdmin();
+    }
+
+    // Show form add admin
+    function handleShowModalAddAdmin() {
+        let btnCreate = $(".btnCreate");
+
+        btnCreate.on('click', function () {
+            $("#mdCreate").modal('show');
+        });
+    }
+
+    // Add Admin
+    function doCreateAdmin() {
+
+        let avatar = $("#avatarAdminCreate").val();
+        let username = $('#usernameAdminCreate').val();
+        let password = $('#passwordAdminCreate').val();
+        let fullName = $('#fullNameAdminCreate').val();
+        let email = $('#emailAdminCreate').val();
+
+        let provinceId = $('#provinceAdminCreate').val();
+        let districtId = $('#districtAdminCreate').val();
+        let wardId = $('#wardAdminCreate').val();
+        let address = $('#addressAdminCreate').val();
+
+        let province_name;
+        let district_name;
+        let ward_name;
+
+        $.each(provinces.results, (i, item) => {
+            if (item.province_id === provinceId) {
+                province_name = item.province_name;
+            }
+        });
+
+        $.each(districts.results, (i, district) => {
+            if (district.district_id === districtId) {
+                district_name = district.district_name;
+            }
+        });
+
+        $.each(wards.results, (i, ward) => {
+            if (ward.ward_id === wardId) {
+                ward_name = ward.ward_name;
+            }
+        });
+
+        let locationRegion = new LocationRegion(0, provinceId, province_name, districtId, district_name, wardId, ward_name, address);
+
+        let user = {
+            username,
+            fullName,
+            password,
+            email,
+            avatar,
+            locationRegion
+        }
+        console.log(user);
+
+        $.ajax({
+            headers: {
+                "accept": "application/json",
+                "content-type": "application/json"
+            },
+            type: "POST",
+            url: "http://localhost:8080/api/users/create-admin",
+            data: JSON.stringify(user)
+        })
+            .done(() => {
+
+                $('#frmCreate')[0].reset();
+                $("#mdCreate .modal-body .modal-alert-danger").addClass('hide').removeClass('show');
+                $("#mdCreate").modal('hide');
+
+                Swal.fire({
+                    // position: 'top-end',
+                    icon: 'success',
+                    title: 'Create Admin Successfully',
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+            })
+            .fail((jqXHR) => {
+                console.log(jqXHR);
+
+                $('#mdCreate .modal-body .modal-alert-danger').fadeIn(1000).empty().addClass('show').removeClass('hide').fadeOut(6000);
+
+                if (jqXHR.responseJSON.message) {
+                    let message = jqXHR.responseJSON.message;
+
+                    let str = `<div id="message-error" class="displayErr">
+                                  <label class="error" for="message">${message}</label>
+                                  <i class="fa fa-times closeMess" aria-hidden="true"></i>
+                               </div>`;
+
+                    $("#mdCreate .modal-body .modal-alert-danger").prepend(str);
+                    closeMessage();
+
+                } else if (jqXHR.responseJSON) {
+                    $.each(jqXHR.responseJSON, (key, item) => {
+                        let str = `<div id="${key}-error" class="displayErr">
+                                            <label class="error" for="${key}De">${item}</label>
+                                            <i class="fa fa-times closeErr" aria-hidden="true"></i>
+                                        </div>`;
+                        $("#" + key).addClass("error");
+
+                        $("#mdCreate .modal-body .modal-alert-danger").prepend(str);
+                        $('#transactionAmountDep').val("");
+                        closeError(key);
+
+                    })
+                }
+            });
+    }
+
+    // Create form validate
+    $("#mdCreate").on('hidden.bs.modal', () => {
+        $("#mdCreate .modal-alert-danger").removeClass("show").addClass("hide");
+        $("#frmCreate").validate().resetForm();
+    })
+
+    $("#frmCreate").validate({
+        rules: {
+            fullNameAdminCreate: {
+                required: true,
+                minlength: 5,
+                maxlength: 30
+            },
+            emailAdminCreate: {
+                required: true,
+                minlength: 5,
+                maxlength: 30,
+                valid_email: true
+            },
+            usernameAdminCreate: {
+                required: true,
+                minlength: 8,
+                maxlength: 20
+            },
+            passwordAdminCreate: {
+                required: true,
+                minlength: 8,
+                maxlength: 20
+            }
+        },
+        messages: {
+            fullNameAdminCreate: {
+                required: "Please enter full name",
+                minlength: "Minimum name length is 5",
+                maxlength: "The maximum name length is 30"
+            },
+            emailAdminCreate: {
+                required: "Please enter email",
+                minlength: "Minimum email length is 5",
+                maxlength: "The maximum email length is 30"
+            },
+            usernameAdminCreate: {
+                required: "Please enter username",
+                minlength: "Minimum username length is 8",
+                maxlength: "The maximum username length is 20"
+            },
+            passwordAdminCreate: {
+                required: "Please enter password",
+                minlength: "Minimum password length is 8",
+                maxlength: "The maximum password length is 20"
+            }
+        },
+        errorLabelContainer: "#mdCreate .modal-alert-danger",
+        errorPlacement: function (error, element) {
+            error.appendTo("#mdCreate .modal-alert-danger");
+        },
+        showErrors: function (errorMap, errorList) {
+            if (this.numberOfInvalids() > 0) {
+                $("#mdCreate .modal-alert-danger").removeClass("hide").addClass("show");
+            } else {
+                $("#mdCreate .modal-alert-danger").removeClass("show").addClass("hide").empty();
+                $("#frmCreate input.error").removeClass("error");
+            }
+            this.defaultShowErrors();
+        },
+        submitHandler: function () {
+            doCreateAdmin();
+        }
+    });
+
+    let btnCreateAdmin = $("#btnCreate");
+    btnCreateAdmin.on('click', () => {
+        console.log("create");
+        $("#frmCreate").submit();
+    });
+    // END create Admin
+
+    // Show profile Admin
+    function handleShowProfileAdmin() {
+
+        let btnProfileAdmin = $(".profile-admin");
+
+        btnProfileAdmin.on('click', function () {
+
+            let id = $('.profile-admin').data('id');
+
+            getUserById(id).then(() => {
+
+                $("#userIdPro").val(user.id);
+                $("#usernameAdminPro").val(user.username);
+                $("#fullNameAdminPro").val(user.fullName);
+                $("#emailAdminPro").val(user.email);
+                $("#phoneAdminPro").val(user.phone);
+                $("#provinceAdminPro").val(user.locationRegion.provinceId);
+
+                getAllDistrictsByProvinceId(user.locationRegion.provinceId).then(() => {
+
+                    $("#districtAdminPro").val(user.locationRegion.districtId);
+
+                    getAllWardsByDistrictId(user.locationRegion.districtId).then(() => {
+
+                        $("#wardAdminPro").val(user.locationRegion.wardId);
+                        $("#addressAdminPro").val(user.locationRegion.address);
+
+                        $("#mdProfileAdmin").modal('show');
+                    })
+                })
+            })
+        })
+    }
+    // change to edit admin
+    $('#changeUsernameA').on('click', () => {
+        $('#usernameAdminPro').removeAttr("readonly").focus();
+        $('.edit').removeClass('hide').addClass('show');
+    })
+    $('#changeFullNameA').on('click', () => {
+        $('#fullNameAdminPro').removeAttr("readonly").focus();
+        $('.edit').removeClass('hide').addClass('show');
+    })
+    $('#changeEmailA').on('click', () => {
+        $('#emailAdminPro').removeAttr("readonly").focus();
+        $('.edit').removeClass('hide').addClass('show');
+    })
+    $('#changePhoneA').on('click', () => {
+        $('#phoneAdminPro').removeAttr("readonly").focus();
+        $('.edit').removeClass('hide').addClass('show');
+    })
+
+    $('#changeLocationA').on('click', () => {
+        $('#provinceAdminPro').removeAttr("disabled");
+        $('#districtAdminPro').removeAttr("disabled");
+        $('#wardAdminPro').removeAttr("disabled");
+        $('#addressAdminPro').removeAttr("readonly");
+
+        $('.edit').removeClass('hide').addClass('show');
+
+        changeLocationEdit();
+        // selectAddressToUpdate();
+    })
+    // Edit Admin
+    function doEditAdmin() {
+        let id = $("#userIdPro").val();
+        let avatar = $("#avatarAdminPro").val();
+        let username = $('#usernameAdminPro').val();
+        let password = "password";
+        let fullName = $('#fullNameAdminPro').val();
+        let email = $('#emailAdminPro').val();
+        let phone = $('#phoneAdminPro').val();
+
+        let provinceId = $('#provinceAdminPro').val();
+        let districtId = $('#districtAdminPro').val();
+        let wardId = $('#wardAdminPro').val();
+        let address = $('#addressAdminPro').val();
+
+        let province_name;
+        let district_name;
+        let ward_name;
+
+        $.each(provinces.results, (i, item) => {
+            if (item.province_id === provinceId) {
+                province_name = item.province_name;
+            }
+        });
+
+        $.each(districts.results, (i, district) => {
+            if (district.district_id === districtId) {
+                district_name = district.district_name;
+            }
+        });
+
+        $.each(wards.results, (i, ward) => {
+            if (ward.ward_id === wardId) {
+                ward_name = ward.ward_name;
+            }
+        });
+
+        let locationRegion = new LocationRegion(0, provinceId, province_name, districtId, district_name, wardId, ward_name, address);
+
+        let user = {
+            id,
+            username,
+            fullName,
+            password,
+            email,
+            phone,
+            avatar,
+            locationRegion
+        }
+        console.log(user);
+
+        $.ajax({
+            headers: {
+                "accept": "application/json",
+                "content-type": "application/json"
+            },
+            type: "POST",
+            url: "http://localhost:8080/api/users/edit-admin",
+            data: JSON.stringify(user)
+        })
+            .done(() => {
+
+                $("#mdProfileAdmin .modal-body .modal-alert-danger").addClass('hide').removeClass('show');
+
+                $('#usernameAdminPro').attr("readonly", "");
+                $('#fullNameAdminPro').attr("readonly", "");
+                $('#emailAdminPro').attr("readonly", "");
+                $('#phoneAdminPro').attr("readonly", "");
+                $('#provinceAdminPro').attr("disabled", "");
+                $('#districtAdminPro').attr("disabled", "");
+                $('#wardAdminPro').attr("disabled", "");
+                $('#addressAdminPro').attr("readonly", "");
+
+                $("#mdProfileAdmin").modal('hide');
+
+                Swal.fire({
+                    // position: 'top-end',
+                    icon: 'success',
+                    title: 'Edit Admin Successfully',
+                    showConfirmButton: false,
+                    timer: 2000
+                })
+
+                $('.edit').removeClass('show').addClass('hide');
+
+
+                $(".profile-admin").click();
+            })
+            .fail((jqXHR) => {
+                console.log(jqXHR);
+
+                $('#mdCreate .modal-body .modal-alert-danger').fadeIn(1000).empty().addClass('show').removeClass('hide').fadeOut(6000);
+
+                if (jqXHR.responseJSON.message) {
+                    let message = jqXHR.responseJSON.message;
+
+                    let str = `<div id="message-error" class="displayErr">
+                                  <label class="error" for="message">${message}</label>
+                                  <i class="fa fa-times closeMess" aria-hidden="true"></i>
+                               </div>`;
+
+                    $("#mdCreate .modal-body .modal-alert-danger").prepend(str);
+                    closeMessage();
+
+                } else if (jqXHR.responseJSON) {
+                    $.each(jqXHR.responseJSON, (key, item) => {
+                        let str = `<div id="${key}-error" class="displayErr">
+                                            <label class="error" for="${key}De">${item}</label>
+                                            <i class="fa fa-times closeErr" aria-hidden="true"></i>
+                                        </div>`;
+                        $("#" + key).addClass("error");
+
+                        $("#mdCreate .modal-body .modal-alert-danger").prepend(str);
+                        $('#transactionAmountDep').val("");
+                        closeError(key);
+
+                    })
+                }
+            });
+    }
+
+    // Edit form validate
+    $("#mdProfileAdmin").on('hidden.bs.modal', () => {
+        $("#mdProfileAdmin .modal-alert-danger").removeClass("show").addClass("hide");
+        $("#frmProfileAdmin").validate().resetForm();
+    })
+
+    $("#frmProfileAdmin").validate({
+        rules: {
+            fullNameAdminPro: {
+                required: true,
+                minlength: 5,
+                maxlength: 30
+            },
+            emailAdminPro: {
+                required: true,
+                minlength: 5,
+                maxlength: 30,
+                valid_email: true
+            },
+            usernameAdminPro: {
+                required: true,
+                minlength: 8,
+                maxlength: 20
+            },
+            phoneAdminPro: {
+                required: true,
+                minlength: 8,
+                maxlength: 20,
+                isPhone: true
+            },
+            addressAdminPro: {
+                minlength: 5,
+                maxlength: 50
+            }
+        },
+        messages: {
+            fullNameAdminPro: {
+                required: "Please enter full name",
+                minlength: "Minimum name length is 5",
+                maxlength: "The maximum name length is 30"
+            },
+            emailAdminPro: {
+                required: "Please enter email",
+                minlength: "Minimum email length is 5",
+                maxlength: "The maximum email length is 30"
+            },
+            usernameAdminPro: {
+                required: "Please enter username",
+                minlength: "Minimum username length is 8",
+                maxlength: "The maximum username length is 20"
+            },
+            phoneAdminPro: {
+                required: "Please enter your phone",
+                minlength: "Minimum phone length is 9",
+                maxlength: "The maximum phone length is 10",
+            },
+            addressAdminPro: {
+                minlength: "Minimum address length is 5",
+                maxlength: "The maximum address length is 50"
+            }
+        },
+        errorLabelContainer: "#mdProfileAdmin .modal-alert-danger",
+        errorPlacement: function (error, element) {
+            error.appendTo("#mdProfileAdmin .modal-alert-danger");
+        },
+        showErrors: function (errorMap, errorList) {
+            if (this.numberOfInvalids() > 0) {
+                $("#mdProfileAdmin .modal-alert-danger").removeClass("hide").addClass("show");
+            } else {
+                $("#mdProfileAdmin .modal-alert-danger").removeClass("show").addClass("hide").empty();
+                $("#frmProfileAdmin input.error").removeClass("error");
+            }
+            this.defaultShowErrors();
+        },
+        submitHandler: function () {
+            doEditAdmin();
+        }
+    });
+
+    let btnEditAdmin = $("#btnEdit");
+    btnEditAdmin.on('click', () => {
+        $("#frmProfileAdmin").submit();
+    });
+    // end edit
+
+    // show form deposit
+    function handleShowDepositModal() {
+
+        let btnDeposit = $(".deposit");
+
+        btnDeposit.on('click', function () {
+
+            let id = $(this).data('id');
+
+            console.log(id);
+
+            getUserByIdCheckBlock(id).then(() => {
+                $("#idUserDep").val(user.id);
+                $("#fullNameUserDep").val(user.fullName);
+                $("#balanceUserDep").val(user.coin);
+
+                $("#mdDeposit").modal('show');
+            })
+        })
+    }
+
+
+    // deposit
+
+    let deposit;
+
+    function doDeposit() {
+
+        let userId = +$("#idUserDep").val();
+        let transactionAmount = +$('#transactionAmountDep').val();
+        let createBy = $('#usernameAdmin').val();
+
+        getUserByIdCheckBlock(userId).then(() => {
+            deposit = new Deposit(0, userId, createBy, transactionAmount);
+
+            $.ajax({
+                headers: {
+                    "accept": "application/json",
+                    "content-type": "application/json"
+                },
+                type: "POST",
+                url: "http://localhost:8080/api/users/deposit",
+                data: JSON.stringify(deposit)
+            })
+                .done((data) => {
+
+                    drawUser(data);
+                    $('#frmDeposit')[0].reset();
+                    $("#mdDeposit .modal-body .modal-alert-danger").addClass('hide').removeClass('show');
+                    $("#mdDeposit").modal('hide');
+
+                    Swal.fire({
+                        // position: 'top-end',
+                        icon: 'success',
+                        title: 'Update coin successfully',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                })
+                .fail((jqXHR) => {
+                    // $('#mdDeposit .modal-body .modal-alert-danger').empty();
+
+                    $('#mdDeposit .modal-body .modal-alert-danger').fadeIn(1000).empty().addClass('show').removeClass('hide').fadeOut(5000);
+                    console.log(jqXHR);
+
+                    if (jqXHR.responseJSON.message) {
+                        let message = jqXHR.responseJSON.message;
+
+                        let str = `<div id="message-error" class="displayErr">
+                                        <label class="error" for="message">${message}</label>
+                                        <i class="fa fa-times closeMess" aria-hidden="true"></i>
+                                    </div>`;
+
+                        $("#mdDeposit .modal-body .modal-alert-danger").append(str);
+                        $('#transactionAmountDep').val("");
+                        closeMessage();
+
+                    } else if (jqXHR.responseJSON) {
+                        $.each(jqXHR.responseJSON, (key, item) => {
+                            let str = `<div id="${key}-error" class="displayErr">
+                                            <label class="error" for="${key}De">${item}</label>
+                                            <i class="fa fa-times closeErr" aria-hidden="true"></i>
+                                        </div>`;
+                            $("#" + key).addClass("error");
+
+                            $("#mdDeposit .modal-body .modal-alert-danger").append(str);
+                            $('#transactionAmountDep').val("");
+
+                            closeError(key);
+                        })
+                    }
+
+                    // $("#mdDeposit .modal-body .modal-alert-danger").append(str);
+                });
+        })
+            .catch(() => {
+
+            })
+    }
+
+    // show deposit error
+    function closeMessage() {
+        $('.closeMess').on('click', () => {
+            $('.modal-alert-danger').empty().removeClass('show').addClass('hide');
+        })
+    }
+
+    function closeError(key) {
+        let btnClose = $('.closeErr');
+        btnClose.on('click', () => {
+            $('.modal-alert-danger').empty().removeClass('show').addClass('hide');
+        })
+    }
+
+
+    // Deposit validate
+    $("#mdDeposit").on('hidden.bs.modal', () => {
+        $("#mdDeposit .modal-alert-danger").removeClass("show").addClass("hide");
+        $("#frmDeposit").validate().resetForm();
+    })
+
+    $("#frmDeposit").validate({
+        rules: {
+            transactionAmountDep: {
+                required: true,
+                isNumberWithSpace: true
+            }
+        },
+        messages: {
+            transactionAmountDep: {
+                required: "(Please enter transaction amount)",
+            }
+        },
+
+        submitHandler: function () {
+            doDeposit();
+        }
+    })
+
+    let btnDeposit = $("#btnDeposit");
+    btnDeposit.on('click', () => {
+        $("#frmDeposit").submit();
+    });
+
+    // END deposit
+
+    // Block user
+    function handleShowBlock() {
+
+        let btnBlock = $(".blocked");
+
+        btnBlock.on('click', function () {
+
+            let id = $(this).data('id');
+
+            doBlock(id);
+        })
+    }
+
+    function doBlock(userid) {
+
+        getUserById(userid).then(() => {
+            Swal.fire({
+                title: `Are you sure block '${user.fullName}'?`,
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#198754',
+                confirmButtonText: 'Yes, block it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        headers: {
+                            "Accept": "application/json",
+                            "Content-type": "application/json"
+                        },
+                        type: "PATCH",
+                        url: 'http://localhost:8080/api/users/blocked',
+                        data: JSON.stringify(user)
+                    })
+                        .done((data) => {
+                            drawUser(data);
+                            handleShowModal();
+                            Swal.fire({
+                                position: 'top-end',
+                                icon: 'success',
+                                title: `User '${user.fullName}' has been blocked`,
+                                showConfirmButton: false,
+                                timer: 1500
+                            })
+                        })
+                        .fail((jqXHR) => {
+                            $('#mdBlock .modal-body .modal-alert-danger').empty();
+
+                            $("#mdBlock .modal-body .modal-alert-danger").addClass('show').removeClass('hide');
+                            console.log(jqXHR.responseJSON);
+                            if (jqXHR.responseJSON.message) {
+                                let message = jqXHR.responseJSON.message;
+
+                                let str = `<label id="message-error" class="error" for="message">${message}</label>`;
+
+                                $("#mdBlock .modal-body .modal-alert-danger").append(str);
+                            } else if (jqXHR.responseJSON) {
+                                $.each(jqXHR.responseJSON, (key, item) => {
+                                    let str = `<label id="${key}-error" class="error" for="${key}Blo">${item}</label>`;
+                                    $("#" + key).addClass("error");
+
+                                    $("#mdBlock .modal-body .modal-alert-danger").append(str);
+                                })
+                            }
+                        });
+                }
+            })
+                .catch(() => {
+                    Swal.fire({
+                        title: "User invalid",
+                        icon: 'error',
+                        showConfirmButton: false,
+                        timer: 2000
+                    })
+                });
+        })
+    }
+
+    //end Block
+
+    // active user
+    function handleShowActive() {
+
+        let btnActive = $(".actived");
+
+        btnActive.on('click', function () {
+            console.log("active");
+            let id = $(this).data('id');
+
+            doActive(id);
+        })
+    }
+
+    function doActive(userId) {
+
+        getUserById(userId).then(() => {
+            Swal.fire({
+                title: `Are you sure active '${user.fullName}'?`,
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#198754',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, active!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        headers: {
+                            "Accept": "application/json",
+                            "Content-type": "application/json"
+                        },
+                        type: "PATCH",
+                        url: 'http://localhost:8080/api/users/active',
+                        data: JSON.stringify(user)
+                    })
+                        .done((data) => {
+                            drawUser(data);
+                            handleShowModal();
+                            Swal.fire({
+                                position: 'top-end',
+                                icon: 'success',
+                                title: `User '${user.fullName}' has been active`,
+                                showConfirmButton: false,
+                                timer: 2000
+                            })
+                        })
+                        .fail((jqXHR) => {
+                            console.log(jqXHR);
+                        });
+                }
+            })
+                .catch(() => {
+                    Swal.fire({
+                        title: "User invalid",
+                        icon: 'error',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                });
+        })
+    }
+
+    // end Active user
+
+    // remove user
+    function handleShowRemove() {
+
+        let btnRemove = $(".remove");
+
+        btnRemove.on('click', function () {
+            console.log("remove");
+            let id = $(this).data('id');
+
+            doRemove(id);
+        })
+    }
+
+    function doRemove(userId) {
+        getUserById(userId).then(() => {
+            Swal.fire({
+                title: `Are you sure remove '${user.fullName}'?`,
+                text: "The data will be moved to the recycle bin!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#198754',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, remove!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        headers: {
+                            "Accept": "application/json",
+                            "Content-type": "application/json"
+                        },
+                        type: "PATCH",
+                        url: 'http://localhost:8080/api/users/remove',
+                        data: JSON.stringify(user)
+                    })
+                        .done((data) => {
+                            $('#table-user tbody').empty();
+
+                            Swal.fire({
+                                position: 'top-end',
+                                icon: 'success',
+                                title: `User '${user.fullName}' has been remove`,
+                                showConfirmButton: false,
+                                timer: 2000
+                            })
+                            getAllUsers();
+                        })
+                        .fail((jqXHR) => {
+                            console.log(jqXHR);
+                        });
+                }
+            })
+                .catch(() => {
+                    Swal.fire({
+                        title: "User invalid",
+                        icon: 'error',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                });
+        })
+    }
+
+
+    // draw user
+    function drawUser(user) {
+        let str = `
+            <tr id="tr_${user.id}">
+                <td class="table-column-pl-0 text-center">
+                  <a class="d-flex align-items-start" style="margin-left: 30px;" href="user-profile.html">
+                    <div class="avatar avatar-soft-primary avatar-circle">
+                      <img class="avatar-initials" src="/images/avatar/${user.avatar}">
+                    </div>
+                    <div class="ml-3" style="text-align: left;">
+                      <span class="d-block h5 text-hover-primary mb-0">${user.fullName}</span>
+                      <span class="d-block font-size-sm text-body">${user.email}</span>
+                    </div>
+                  </a>
+                </td>
+                <td>
+                  <span class="d-block h5 mb-0">${user.username}</span>
+                </td>
+                <td>${user.phone}</td>
+                <td>
+                  ${formatCash(user.coin)}
+                </td>
+                <td>
+                  <div class="d-flex align-items-center" id="status">
+                    ${checkStatus(user.blocked)}
+                  </div>
+                </td>
+                <td class="text-center">
+                  <button class="btn btn-sm btn-outline-primary deposit" data-id="${user.id}" data-bs-toggle="tooltip"
+                                    data-bs-placement="top" data-bs-title="Coin">
+                    <i class="tio-coin"></i> Coin
+                  </button>
+
+                  ${checkAction(user.blocked, user.id)}
+
+                  <button class="btn btn-sm btn-outline-danger remove" data-id="${user.id}" data-bs-toggle="tooltip"
+                                    data-bs-placement="top" data-bs-title="Remove">
+                    <i class="fa fa-trash-o" aria-hidden="true"></i> Remove
+                  </button>
+                </td>
+            </tr>
+      `;
+        let trUser = $(`#tr_${user.id}`);
+        trUser.replaceWith(str);
+
+        handleShowModal();
+
+        // drawFooter(item);
+    }
+
+    // check data input number
+    $.validator.addMethod("isNumberWithSpace", function (value, element) {
+        return this.optional(element) || /^[-+]?\s*[0-9\s]+\s*$/i.test(value);
+    }, "(Please enter number)");
+
+    // validate Email
+    $.validator.addMethod('valid_email', function (value) {
+        const regex = /^[a-z0-9]+([-._][a-z0-9]+)*@([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{1,5}$/;
+        return value.trim().match(regex);
+    }, "(Email invalid!Ex: abc@def.xyz)");
+
+    // validate Phone
+    $.validator.addMethod('isPhone', function (value) {
+        const regex = /^(0?)(3[2-9]|5[6|8|9]|7[0|6-9]|8[0-6|8|9]|9[0-4|6-9])[0-9]{7}$/;
+        return value.trim().match(regex);
+    }, "Phone number format in Vietnam");
+
+    // reset form then close
+    let btnClose = $(".btnClose");
+    btnClose.on('click', () => {
+        $("#mdDeposit .modal-body .modal-alert-danger").removeClass('show').addClass('hide');
+        $('#frmDeposit')[0].reset();
+    });
+
+    function checkAction(blocked, id) {
+        if (blocked === false) {
+            return `<button class="btn btn-sm btn-outline-warning blocked" data-id="${id}" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Block">` +
+                '<i class="fa fa-ban"></i> Block' +
+                '</button>';
+        }
+        if (blocked === true) {
+            return `<button class="btn btn-sm btn-outline-success actived" data-id="${id}" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Active">` +
+                '<i class="tio-done"></i> Active</button>';
+        }
+    }
+
+    function checkStatus(blocked) {
+        if (blocked === false) {
+            return '<span class="legend-indicator bg-success"></span>Active';
+        }
+        if (blocked === true) {
+            return '<span class="legend-indicator bg-danger"></span>Blocked';
+        }
+    }
+
+    // format money
+    function formatCash(coin) {
+        let str = coin.toString();
+        return str.split('').reverse().reduce((prev, next, index) => {
+            return ((index % 3) ? next : (next + ',')) + prev;
+        });
+    }
+
+    function returnEmpty(str) {
+        if (str == null) {
+            return "";
+        }
+        return str;
+    }
+
+    // let location;
+    let provinces = [];
+    let districts = [];
+    let wards = [];
+
+    // API Province
+    function getAllProvinces() {
+        return $.ajax({
+            headers: {
+                "accept": "application/json",
+                "content-type": "application/json"
+            },
+            type: "GET",
+            url: "https://vapi.vnappmob.com/api/province/"
+        })
+            .done((data) => {
+                $.each(data.results, (i, item) => {
+                    let str = `<option value="${item.province_id}">${item.province_name}</option>`;
+                    $("#provinceAdminCreate").append(str);
+                    $("#provinceAdminPro").append(str);
+                });
+                provinces = data;
+            })
+            .fail((jqXHR) => {
+
+            })
+    }
+
+    function getAllDistrictsByProvinceId(provinceId) {
+        return $.ajax({
+            headers: {
+                "accept": "application/json",
+                "content-type": "application/json"
+            },
+            type: "GET",
+            url: "https://vapi.vnappmob.com/api/province/district/" + provinceId
+        })
+            .done((data) => {
+                if (data.results.length !== 0) {
+                    $('#districtAdminCreate').empty();
+                    $('#districtAdminPro').empty();
+
+                    $.each(data.results, (i, item) => {
+                        let str = `<option value="${item.district_id}">${item.district_name}</option>`;
+                        $("#districtAdminCreate").append(str);
+                        $("#districtAdminPro").append(str);
+                    });
+                    districts = data;
+                } else {
+                    Swal.fire({
+                        title: "Province invalid!",
+                        icon: 'question',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                }
+            })
+            .fail((jqXHR) => {
+
+            })
+    }
+
+
+    function getAllWardsByDistrictId(districtId) {
+        return $.ajax({
+            headers: {
+                "accept": "application/json",
+                "content-type": "application/json"
+            },
+            type: "GET",
+            url: "https://vapi.vnappmob.com/api/province/ward/" + districtId
+        })
+            .done((data) => {
+                if (data.results.length !== 0) {
+                    $('#wardAdminCreate').empty();
+                    $('#wardAdminPro').empty();
+
+                    $.each(data.results, (i, item) => {
+                        let str = `<option value="${item.ward_id}">${item.ward_name}</option>`;
+                        $("#wardAdminCreate").append(str);
+                        $("#wardAdminPro").append(str);
+                    });
+                    wards = data;
+                }
+                else {
+                    Swal.fire({
+                        title: "District invalid!",
+                        icon: 'question',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                }
+
+            })
+            .fail((jqXHR) => {
+
+            })
+    }
+
+    function selectAddressToCreate() {
+        getAllProvinces().then(() => {
+            let provinceId = $("#provinceAdminCreate").val();
+
+            getAllDistrictsByProvinceId(provinceId).then(() => {
+
+                let districtId = $("#districtAdminCreate").val();
+
+                getAllWardsByDistrictId(districtId);
+            });
+        })
+    }
+
+    function selectAddressToUpdate() {
+        getAllProvinces().then(() => {
+            let provinceId = $("#provinceAdminPro").val();
+
+            getAllDistrictsByProvinceId(provinceId).then(() => {
+
+                let districtId = $("#districtAdminPro").val();
+
+                getAllWardsByDistrictId(districtId);
+            });
+        })
+    }
+
+
+    $("#provinceAdminCreate").change(() => {
+        console.log("ch");
+        let provinceId = $("#provinceAdminCreate").val();
+
+        getAllDistrictsByProvinceId(provinceId).then(() => {
+
+            let districtId = $("#districtAdminCreate").val();
+
+            getAllWardsByDistrictId(districtId);
+        })
+    })
+
+    function changeLocationEdit() {
+        $("#provinceAdminPro").change(() => {
+            console.log("chiiiii");
+
+            let provinceId = $("#provinceAdminPro").val();
+
+            getAllDistrictsByProvinceId(provinceId).then(() => {
+
+                let districtId = $("#districtAdminPro").val();
+
+                getAllWardsByDistrictId(districtId);
+            })
+        })
+
+        $("#districtAdminPro").change(() => {
+            let districtId = $("#districtAdminPro").val();
+
+            getAllWardsByDistrictId(districtId);
+        })
+    }
+
+
+
+    $("#districtAdminCreate").change(() => {
+        let districtId = $("#districtAdminCreate").val();
+
+        getAllWardsByDistrictId(districtId);
+    })
+
+
+    // END API province
+</script>
+</body>
+
+</html>

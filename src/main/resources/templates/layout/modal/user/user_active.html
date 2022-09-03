@@ -1,0 +1,50 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<th:block th:fragment="user_active">
+    <!-- Active user Modal -->
+    <div class="modal fade" id="mdActive" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
+         aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: #188134; padding: 12px;">
+                    <h3 style="color: white" class="modal-title">Do you want active this user?</h3>
+                    <button type="button" class="btn-close btnClose" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="modal-alert-danger hide" id="blockErr"></div>
+                    <form id="frmActive" action="" method="post">
+                        <div class="row mt-6">
+                            <input type="hidden" id="idUserAct" name="idUserAct" class="form-control" readonly>
+                            <div class="col-lg-6">
+                                <label for="fullNameAct" class="fw-bold">Full name</label>
+                                <input type="text" id="fullNameAct" name="fullNameAct" class="form-control" readonly>
+                            </div>
+                            <div class="col-lg-6">
+                                <label for="phoneAct" class="fw-bold"><strong>Phone</strong></label>
+                                <input type="text" id="phoneAct" name="phoneAct" class="form-control" readonly>
+                            </div>
+                        </div>
+                        <div class="row mt-6">
+                            <div class="col-lg-6">
+                                <label for="usernameAct" class="fw-bold"><strong>Username</strong></label>
+                                <input type="text" id="usernameAct" name="usernameAct" class="form-control" readonly>
+                            </div>
+                            <div class="col-lg-6">
+                                <label for="emailAct" class="fw-bold">Email</label>
+                                <input type="text" id="emailAct" name="emailAct" class="form-control" readonly>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer" style="background-color: #f3f3f3; padding: 12px;">
+                    <button type="button" class="btn btn-secondary btnClose" data-bs-dismiss="modal">Close</button>
+                    <button type="button" id="btnActive" class="btn btn-outline-success">
+                        <i class="tio-done" aria-hidden="true"></i>
+                        Active
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Active user Modal -->
+</th:block>

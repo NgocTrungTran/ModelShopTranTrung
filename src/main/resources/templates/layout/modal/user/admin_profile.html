@@ -1,0 +1,141 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<th:block th:fragment="admin_profile">
+    <!-- Create User Modal -->
+    <div class="modal fade" id="mdProfileAdmin" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
+         aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: #377dff; padding: 12px;">
+                    <h3 style="color: white" class="modal-title">Admin profile</h3>
+                    <button type="button" class="btn-close btnClose" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="modal-alert-danger hide col-3" id="editErr"></div>
+                    <form id="frmProfileAdmin" action="" method="post">
+                        <div class="card-body">
+
+                            <div class="row form-group">
+                                <div class="col-sm-12">
+                                    <div class="text-center">
+                                        <!-- Avatar -->
+                                        <img id="avatarAdminPro" class="rounded-circle mx-auto" width="250" height="250"
+                                             src="/images/avatar/avatardefault.png" alt="Image Description">
+                                        <!-- End Avatar -->
+                                    </div>
+                                </div>
+                            </div>
+                            <input type="hidden" id="userIdPro">
+                            <div class="col-sm-6" style="float: left">
+                                <div class="row form-group">
+                                    <label for="usernameAdminPro"
+                                           class="col-sm-5 col-form-label input-label">Username</label>
+
+                                    <div class="col-sm-12">
+                                        <input type="text" class="form-control" name="usernameAdminPro"
+                                               id="usernameAdminPro"
+                                               aria-label="usernameAdminPro" readonly>
+                                        <i class="fa fa-pencil-square" id="changeUsernameA" aria-hidden="true"> Change
+                                            username</i>
+                                    </div>
+                                </div>
+
+                                <div class="row form-group">
+                                    <label for="fullNameAdminPro" class="col-sm-5 col-form-label input-label">Full
+                                        name </label>
+
+                                    <div class="col-sm-12">
+                                        <input type="text" class="form-control" name="fullNameAdminPro"
+                                               id="fullNameAdminPro"
+                                               aria-label="fullNameAdmin" readonly>
+                                        <i class="fa fa-pencil-square" id="changeFullNameA" aria-hidden="true"> Change
+                                            full name</i>
+                                    </div>
+                                </div>
+
+                                <div class="row form-group">
+                                    <label for="emailAdminPro" class="col-sm-5 col-form-label input-label">Email</label>
+
+                                    <div class="col-sm-12">
+                                        <input type="text" class="form-control" name="emailAdminPro" id="emailAdminPro"
+                                               readonly>
+                                        <i class="fa fa-pencil-square" id="changeEmailA" aria-hidden="true"> Change
+                                            email</i>
+                                    </div>
+                                </div>
+
+                                <div class="row form-group">
+                                    <label for="phoneAdminPro" class="col-sm-5 col-form-label input-label">Phone</label>
+
+                                    <div class="col-sm-12">
+                                        <input type="text" class="form-control" name="phoneAdminPro" id="phoneAdminPro"
+                                               readonly>
+                                        <i class="fa fa-pencil-square" id="changePhoneA" aria-hidden="true"> Change
+                                            phone</i>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6" style="float: left">
+                                <div class="row form-group">
+                                    <label for="provinceAdminPro"
+                                           class="col-sm-5 col-form-label input-label">Province</label>
+                                    <input type="hidden" id="provinceIdPro">
+                                    <div class="col-sm-12 province-edit">
+                                        <select name="provinceAdminPro" id="provinceAdminPro" class="form-select" disabled>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="row form-group">
+                                    <label for="districtAdminPro"
+                                           class="col-sm-5 col-form-label input-label">District</label>
+                                    <input type="hidden" id="districtIdPro">
+
+                                    <div class="col-sm-12 district-edit">
+                                        <select name="districtAdminPro" id="districtAdminPro" class="form-select" disabled>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="row form-group">
+                                    <label for="wardAdminPro" class="col-sm-5 col-form-label input-label">Ward</label>
+                                    <input type="hidden" id="wardIdPro">
+
+                                    <div class="col-sm-12 ward-edit">
+                                        <select name="wardAdminPro" id="wardAdminPro" class="form-select" disabled>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="row form-group">
+                                    <label for="addressAdminPro"
+                                           class="col-sm-5 col-form-label input-label">Address</label>
+
+                                    <div class="col-sm-12">
+                                        <input type="text" class="form-control" name="addressAdminPro"
+                                               id="addressAdminPro" readonly>
+                                        <i class="fa fa-pencil-square" id="changeLocationA" aria-hidden="true"> Change
+                                            location region</i>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btnClose" data-bs-dismiss="modal">Close</button>
+                    <button type="button" id="btnEdit" class="btn btn-outline-success hide edit">
+                        <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                        Edit
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Deposit user Modal -->
+</th:block>
+
+

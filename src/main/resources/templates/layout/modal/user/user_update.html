@@ -1,0 +1,206 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<th:block th:fragment="user_update">
+    <!-- Edit user Modal -->
+    <div class="modal fade" id="editUserModal" tabindex="-1" role="dialog" aria-labelledby="editUserModalTitle"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <!-- Header -->
+                <div class="modal-header">
+                    <h4 id="editUserModalTitle" class="modal-title">Edit user</h4>
+
+                    <button type="button" class="btn btn-icon btn-sm btn-ghost-secondary" data-dismiss="modal" aria-label="Close">
+                        <i class="tio-clear tio-lg"></i>
+                    </button>
+                </div>
+                <!-- End Header -->
+
+                <!-- Body -->
+                <div class="modal-body">
+                    <!-- Nav -->
+                    <ul class="js-tabs-to-dropdown nav nav-segment nav-fill nav-lg-down-break mb-5" id="editUserModalTab"
+                        role="tablist" data-hs-transform-tabs-to-btn-options='{
+                  "transformResolution": "lg",
+                  "btnClassNames": "btn btn-block btn-white dropdown-toggle justify-content-center mb-3"
+                }'>
+                        <li class="nav-item">
+                            <a class="nav-link active" id="profile-tab" data-toggle="tab" href="#profile" role="tab">
+                                <i class="tio-user-outlined mr-1"></i> Profile
+                            </a>
+                        </li>
+
+                    </ul>
+                    <!-- End Nav -->
+
+                    <!-- Tab Content -->
+                    <div class="tab-content" id="editUserModalTabContent">
+                        <div class="tab-pane fade show active" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                            <form>
+                                <!-- Profile Cover -->
+                                <div class="profile-cover">
+                                    <div class="profile-cover-img-wrapper">
+                                        <img id="editProfileCoverImgModal" class="profile-cover-img" src="assets\img\1920x400\img1.jpg"
+                                             alt="Image Description">
+
+                                        <!-- Custom File Cover -->
+                                        <div class="profile-cover-content profile-cover-btn p-3">
+                                            <div class="custom-file-btn">
+                                                <input type="file" class="js-file-attach custom-file-btn-input"
+                                                       id="editProfileCoverUplaoderModal" data-hs-file-attach-options='{
+                                      "textTarget": "#editProfileCoverImgModal",
+                                      "mode": "image",
+                                      "targetAttr": "src",
+                                      "allowTypes": [".png", ".jpeg", ".jpg"]
+                                   }'>
+                                                <label class="custom-file-btn-label btn btn-sm btn-white" for="editProfileCoverUplaoderModal">
+                                                    <i class="tio-add-photo"></i>
+                                                    <span class="d-none d-sm-inline-block ml-1">Upload header</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <!-- End Custom File Cover -->
+                                    </div>
+                                </div>
+                                <!-- End Profile Cover -->
+
+                                <!-- Avatar -->
+                                <label
+                                        class="avatar avatar-xxl avatar-circle avatar-border-lg avatar-uploader profile-cover-avatar mb-5"
+                                        for="editAvatarUploaderModal">
+                                    <img id="editAvatarImgModal" class="avatar-img" src="assets\img\160x160\img9.jpg"
+                                         alt="Image Description">
+
+                                    <input type="file" class="js-file-attach avatar-uploader-input" id="editAvatarUploaderModal"
+                                           data-hs-file-attach-options='{
+                                "textTarget": "#editAvatarImgModal",
+                                "mode": "image",
+                                "targetAttr": "src",
+                                "allowTypes": [".png", ".jpeg", ".jpg"]
+                             }'>
+
+                                    <span class="avatar-uploader-trigger">
+                    <i class="tio-edit avatar-uploader-icon shadow-soft"></i>
+                  </span>
+                                </label>
+                                <!-- End Avatar -->
+
+                                <!-- Form Group -->
+                                <div class="row form-group">
+                                    <label for="editFirstNameModalLabel" class="col-sm-3 col-form-label input-label">Full name <i
+                                            class="tio-help-outlined text-body ml-1" data-toggle="tooltip" data-placement="top"
+                                            title="Displayed on public forums, such as Front."></i></label>
+
+                                    <div class="col-sm-9">
+                                        <div class="js-form-message input-group input-group-sm-down-break">
+                                            <input type="text" class="form-control" name="editFirstNameModal" id="editFirstNameModalLabel"
+                                                   placeholder="Your first name" aria-label="Your first name" value="Ella">
+                                            <input type="text" class="form-control" name="editLastNameModal" id="editLastNameModalLabel"
+                                                   placeholder="Your last name" aria-label="Your last name" value="Lauda">
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- End Form Group -->
+
+                                <!-- Form Group -->
+                                <div class="row form-group">
+                                    <label for="editEmailModalLabel" class="col-sm-3 col-form-label input-label">Email</label>
+
+                                    <div class="col-sm-9">
+                                        <div class="js-form-message">
+                                            <input type="email" class="form-control" name="editEmailModal" id="editEmailModalLabel"
+                                                   placeholder="Email" aria-label="Email" value="ella@example.com">
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- End Form Group -->
+
+                                <!-- Form Group -->
+                                <div class="row form-group">
+                                    <label for="editPhoneLabel" class="col-sm-3 col-form-label input-label">Phone <span
+                                            class="input-label-secondary">(Optional)</span></label>
+
+                                    <div class="col-sm-9">
+                                        <div class="input-group input-group-sm-down-break align-items-center">
+                                            <input type="text" class="js-masked-input form-control" name="phone" id="editPhoneLabel"
+                                                   placeholder="+x(xxx)xxx-xx-xx" aria-label="+x(xxx)xxx-xx-xx" value="1(609)972-22-22"
+                                                   data-hs-mask-options='{
+                                   "template": "+0(000)000-00-00"
+                                 }'>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- End Form Group -->
+
+                                <!-- Form Group -->
+                                <div class="row form-group">
+                                    <label for="editOrganizationModalLabel"
+                                           class="col-sm-3 col-form-label input-label">Organization</label>
+
+                                    <div class="col-sm-9">
+                                        <div class="js-form-message">
+                                            <input type="text" class="form-control" name="editOrganizationModal"
+                                                   id="editOrganizationModalLabel" placeholder="Your organization" aria-label="Your organization"
+                                                   value="Htmlstream">
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- End Form Group -->
+
+                                <!-- Form Group -->
+                                <div class="row form-group">
+                                    <label for="editDepartmentModalLabel" class="col-sm-3 col-form-label input-label">Department</label>
+
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control" name="editDepartmentModal" id="editDepartmentModalLabel"
+                                               placeholder="Your department" aria-label="Your department">
+                                    </div>
+                                </div>
+                                <!-- End Form Group -->
+
+                                <!-- Form Group -->
+                                <div class="row form-group">
+                                    <label class="col-sm-3 col-form-label input-label">Account type</label>
+
+                                    <div class="col-sm-9">
+                                        <div class="js-form-message input-group input-group-sm-down-break">
+                                            <!-- Custom Radio -->
+                                            <div class="form-control">
+                                                <div class="custom-control custom-radio">
+                                                    <input type="radio" class="custom-control-input" name="editUserModalAccountTypeModalRadio"
+                                                           id="editUserModalAccountTypeModalRadio1" checked="">
+                                                    <label class="custom-control-label"
+                                                           for="editUserModalAccountTypeModalRadio1">Individual</label>
+                                                </div>
+                                            </div>
+                                            <!-- End Custom Radio -->
+
+                                            <!-- Custom Radio -->
+                                            <div class="form-control">
+                                                <div class="custom-control custom-radio">
+                                                    <input type="radio" class="custom-control-input" name="editUserModalAccountTypeModalRadio"
+                                                           id="editUserModalAccountTypeModalRadio2">
+                                                    <label class="custom-control-label" for="editUserModalAccountTypeModalRadio2">Company</label>
+                                                </div>
+                                            </div>
+                                            <!-- End Custom Radio -->
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- End Form Group -->
+
+                                <div class="d-flex justify-content-end">
+                                    <button type="button" class="btn btn-white mr-2" data-dismiss="modal"
+                                            aria-label="Close">Cancel</button>
+                                    <button type="submit" class="btn btn-primary">Save changes</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- End Tab Content -->
+                </div>
+                <!-- End Body -->
+            </div>
+        </div>
+    </div>
+    <!-- End Edit user Modal -->
+</th:block>

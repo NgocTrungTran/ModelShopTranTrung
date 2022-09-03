@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+
+<head>
+    <title>Model Shop</title>
+    <th:block th:replace="/layout/head :: head"/>
+</head>
+
+<body class="footer-offset">
+<th:block th:replace="/layout/builder :: builder"/>
+
+<th:block th:replace="/layout/header_body :: headerBody"/>
+
+<th:block th:replace="/layout/left_bar :: leftBar"/>
+
+
+
+<main id="content" role="main" class="main">
+
+    <!--    Show error-->
+    <div class="modal-alert-danger hide" id="mainErr"></div>
+    <!-- Content -->
+    <div class="content container-fluid">
+        <!-- Page Header -->
+        <div class="page-header">
+            <div class="row align-items-end">
+                <div class="col-sm mb-2 mb-sm-0">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb breadcrumb-no-gutter">
+                            <li class="breadcrumb-item"><a class="breadcrumb-link" href="javascript:;">Admin</a></li>
+                            <li class="breadcrumb-item"><a class="breadcrumb-link" href="javascript:;">Product</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">List</li>
+                        </ol>
+                    </nav>
+
+                    <h1 class="page-header-title">Product</h1>
+                </div>
+
+                <div class="col-sm-auto">
+                    <button class="btn btn-primary btnCreate">
+                        <i class="fa fa-plus-circle" aria-hidden="true"></i>  Product
+                    </button>
+                </div>
+            </div>
+            <!-- End Row -->
+        </div>
+        <!-- End Page Header -->
+        <!-- Card -->
+        <div class="card">
+            <!-- Header -->
+            <div class="card-header">
+                <div class="row justify-content-between align-items-center flex-grow-1">
+                    <div class="col-sm-12 col-md-6 mb-4 mb-sm-0">
+                        <form class="col-sm-6">
+                            <!-- Search -->
+                            <div class="input-group input-group-merge input-group-flush">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <i class="tio-search"></i>
+                                    </div>
+                                </div>
+                                <input id="datatableSearch" type="search" class="form-control"
+                                       placeholder="Search users"
+                                       aria-label="Search users">
+                            </div>
+                            <!-- End Search -->
+                        </form>
+                    </div>
+                </div>
+                <!-- End Row -->
+            </div>
+            <!-- End Header -->
+
+            <!-- Table -->
+            <div class="table-responsive datatable-custom">
+                <table id="table-user"
+                       class="table table-lg table-borderless table-thead-bordered table-nowrap table-align-middle card-table">
+                    <thead class="thead-light">
+                    <tr>
+                        <th class="table-column-pl-0 text-center">Title</th>
+                        <th>Category</th>
+                        <th>Price (VND)</th>
+                        <th>Sold</th>
+                        <th>Image</th>
+                        <th class="text-center">Action</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+            <!-- End Table -->
+        </div>
+        <!-- End Card -->
+    </div>
+    <!-- End Content -->
+
+    <!-- Footer -->
+
+    <th:block th:replace="/layout/footer :: footer"/>
+
+    <!-- End Footer -->
+
+    <!--    Modal start -->
+
+
+    <th:block th:replace="/layout/modal/product/product_create :: product_create"/>
+
+
+</main>
+<!-- ========== END MAIN CONTENT ========== -->
+<th:block th:replace="/layout/script :: script"/>
+<script src="/assets/js/model.js"></script>
+<script src="/assets/js/app.page.js"></script>
+<script>
+    let page = {
+        urls: {
+            getAllProducts: App.BASE_URL_PRODUCT
+        }
+    }
+
+    let product = new Product();
+
+    handleShowModalCreateProduct();
+    // Show form create product
+    function handleShowModalCreateProduct() {
+        let btnCreate = $(".btnCreate");
+
+        btnCreate.on('click', function () {
+            $("#mdCreate").modal('show');
+        });
+    }
+
+    // Create product
+    function doCreateProdct() {
+
+        let title = $("#titleCreate").val();
+        let image = $('#imageCreate').val();
+        let price = +$('#priceCreate').val();
+        let categoryTitle = $('#categoryCreate').val();
+
+        let category = new Category(0, categoryTitle);
+
+        product = {
+            title,
+            image,
+            price,
+            category
+        }
+        console.log(product);
+
+        $.ajax({
+            headers: {
+                "accept": "application/json",
+                "content-type": "application/json"
+            },
+            type: "POST",
+            url: "http://localhost:8080/api/products/create",
+            data: JSON.stringify(product)
+        })
+            .done(() => {
+
+                $('#frmCreate')[0].reset();
+                $("#mdCreate .modal-body .modal-alert-danger").addClass('hide').removeClass('show');
+                $("#mdCreate").modal('hide');
+
+                Swal.fire({
+                    // position: 'top-end',
+                    icon: 'success',
+                    title: 'Create Product Successfully',
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+            })
+            .fail((jqXHR) => {
+                console.log(jqXHR);
+
+                $('#mdCreate .modal-body .modal-alert-danger').fadeIn(1000).empty().addClass('show').removeClass('hide').fadeOut(6000);
+
+                if (jqXHR.responseJSON.message) {
+                    let message = jqXHR.responseJSON.message;
+
+                    let str = `<div id="message-error" class="displayErr">
+                                  <label class="error" for="message">${message}</label>
+                                  <i class="fa fa-times closeMess" aria-hidden="true"></i>
+                               </div>`;
+
+                    $("#mdCreate .modal-body .modal-alert-danger").prepend(str);
+                    closeMessage();
+
+                } else if (jqXHR.responseJSON) {
+                    $.each(jqXHR.responseJSON, (key, item) => {
+                        let str = `<div id="${key}-error" class="displayErr">
+                                            <label class="error" for="${key}De">${item}</label>
+                                            <i class="fa fa-times closeErr" aria-hidden="true"></i>
+                                        </div>`;
+                        $("#" + key).addClass("error");
+
+                        $("#mdCreate .modal-body .modal-alert-danger").prepend(str);
+                        $('#transactionAmountDep').val("");
+                        closeError(key);
+
+                    })
+                }
+            });
+    }
+
+    let btnCreateProduct = $("#btnCreate");
+    btnCreateProduct.on('click', () => {
+        // $("#frmCreate").submit();
+        doCreateProdct();
+    });
+</script>
+</body>
+
+</html>

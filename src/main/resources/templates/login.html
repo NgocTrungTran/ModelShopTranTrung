@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Login Model Shop</title>
+    <link rel="stylesheet" href="/assets/bootstrap520/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/assets/node_modules/sweetalert2/dist/sweetalert2.min.css">
+    <link rel="stylesheet" href="/assets/fontawesome-4.7/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/assets/css/login.css">
+</head>
+<body>
+<div class="background">
+    <img style="width: 100%" src="/images/background/gundam.jpg">
+</div>
+<div class="materialContainer">
+
+    <div class="box">
+
+        <div class="title">LOGIN</div>
+
+        <div class="input">
+            <label for="userLog" class="userLog">Username</label>
+            <input type="text" name="userLog" id="userLog">
+            <span class="spin"></span>
+        </div>
+
+        <div class="input">
+            <label for="passLog" class="passLog">Password</label>
+            <input type="password" name="passLog" id="passLog">
+            <span class="spin"></span>
+        </div>
+
+        <div class="button login" id="btnLogin">
+            <button type="button"><span>GO</span></button>
+        </div>
+
+        <a href="" class="pass-forgot">Forgot your password?</a>
+
+    </div>
+
+    <div class="overbox" id="register">
+        <div class="material-button alt-2"><span class="shape"></span></div>
+        <div class="modal-alert-danger hide col-8"></div>
+        <div class="title">REGISTER</div>
+        <form id="frmRegister" action="" method="post">
+            <div class="input">
+                <label for="regname">Username</label>
+                <input type="text" name="regname" id="regname">
+            </div>
+
+            <div class="input">
+                <label for="regpass">Password</label>
+                <input type="password" name="regpass" id="regpass">
+            </div>
+
+            <div class="input">
+                <label for="reregpass">Re-Password</label>
+                <input type="password" name="reregpass" id="reregpass">
+                <span class="notMatch"></span>
+            </div>
+
+            <div class="button">
+                <button type="button" id="btnRegister"><span>NEXT</span></button>
+            </div>
+        </form>
+
+    </div>
+</div>
+<script src="/assets/node_modules/jquery/dist/jquery.min.js"></script>
+<script src="/assets/node_modules/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="/assets/node_modules/sweetalert2/dist/sweetalert2.all.min.js"></script>
+<script src="/assets/js/login.js">
+</script>
+<script>
+    init();
+
+    function init() {
+        login();
+    }
+
+    function login() {
+        $("#btnLogin").on('click', () => {
+            let username = $("#userLog").val();
+            let password = $("#passLog").val();
+
+            let user = {
+                username,
+                password
+            }
+
+            $.ajax({
+                headers: {
+                    "accept": "application/json",
+                    "content-type": "application/json"
+                },
+                type: "POST",
+                url: "http://localhost:8080/api/auth/login",
+                data: JSON.stringify(user)
+            })
+                .done(() => {
+                    location.href = "/admin/" + username + "/user";
+                })
+                .fail(() => {
+                    alert("Error")
+                })
+        })
+    }
+
+    function register() {
+        $("#btnRegister").on('click', () => {
+            let username = $("#regname").val();
+            let password = $("#regpass").val();
+            let rePassword = $('#reregpass').val();
+
+
+            let user = {
+                username,
+                password
+            }
+
+            $.ajax({
+                headers: {
+                    "accept": "application/json",
+                    "content-type": "application/json"
+                },
+                type: "POST",
+                url: "http://localhost:8080/api/auth/register",
+                data: JSON.stringify(user)
+            })
+                .done(() => {
+                    Swal.fire({
+                        // position: 'top-end',
+                        icon: 'success',
+                        title: 'Register Successfully',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+
+                    $('.shape').click();
+
+                    $('#userLog').val(username).focus();
+                    $('#passLog').val(password).focus();
+
+                    $('.userLog').css('line-height', '18px')
+                                .css('font-size', '18px')
+                                .css('font-weight', '100')
+                                .css('top', '0px');
+
+                    $('.passLog').css('line-height', '18px');
+                    $('.passLog').css('font-size', '18px');
+                    $('.passLog').css('font-weight', '100');
+                    $('.passLog').css('top', '0px');
+
+                    $('#frmRegister')[0].reset();
+
+                })
+                .fail((jqXHR) => {
+                    console.log(jqXHR);
+                    $('.overbox .modal-alert-danger').fadeIn(1000).empty().addClass('show').removeClass('hide').fadeOut(3000, () => {
+                        $('.modal-alert-danger').empty().removeClass('show').addClass('hide');
+                    });
+
+                    if (jqXHR.responseJSON.message) {
+                        // removeEvent();
+
+                        let message = jqXHR.responseJSON.message;
+
+                        let str = `<div id="message-error" class="registerErr">
+                                        <label class="error" for="message">
+                                          <i class="fa fa-exclamation" aria-hidden="true"></i>
+                                          ${message}
+                                        </label>
+                                        <i class="btn-close" id="closeMess" aria-hidden="true"></i>
+                                    </div>`;
+
+                        $(".overbox .modal-alert-danger").append(str);
+
+                        closeMessage();
+                    } else if (jqXHR.responseJSON) {
+                        $.each(jqXHR.responseJSON, (key, item) => {
+                            let str = `<div id="${key}-error" class="displayErr">
+                                        <i class="fa fa-exclamation" aria-hidden="true"></i>
+
+                                        <label class="error" for="${key}De">${item}</label>
+                                        <i class="fa fa-times closeErr" aria-hidden="true"></i>
+                                        </div>`;
+                            $("#" + key).addClass("error");
+
+                            $(".overbox .modal-alert-danger").append(str);
+
+                            closeError(key);
+                        })
+                    }
+                })
+        })
+    }
+
+    // show hide error
+    function closeMessage() {
+        $('#closeMess').on('click', () => {
+            $('.modal-alert-danger').empty().removeClass('show').addClass('hide');
+        })
+    }
+
+    function closeError(key) {
+        let btnClose = $('.closeErr');
+        btnClose.on('click', () => {
+            $('.modal-alert-danger').empty().removeClass('show').addClass('hide');
+        })
+    }
+
+
+    $(".overbox").on('hidden.bs.modal', () => {
+        $(".overbox .modal-alert-danger").removeClass("show").addClass("hide");
+        $("#frmRegister").validate().resetForm();
+    })
+
+    $("#frmRegister").validate({
+        rules: {
+            regname: {
+                required: true,
+                minlength: 8,
+                maxlength: 20
+            },
+            regpass: {
+                required: true,
+                minlength: 8,
+                maxlength: 15
+            },
+            reregpass: {
+                equalTo: "#regpass",
+                required: true
+            }
+        },
+        messages: {
+            regname: {
+                required: "(Please enter username)",
+                minlength: "Minimum username length is 8",
+                maxlength: "The maximum name length is 20"
+            },
+            regpass: {
+                required: "(Please enter password)",
+                minlength: "Minimum password length is 8",
+                maxlength: "The maximum name length is 15"
+            },
+            reregpass: {
+                required: "(Please enter password again)",
+                equalTo: "Password do not match"
+            }
+        },
+        errorLabelContainer: "#register .modal-alert-danger",
+        errorPlacement: function (error, element) {
+            error.appendTo("#register .modal-alert-danger");
+        },
+        showErrors: function (errorMap, errorList) {
+            if (this.numberOfInvalids() > 0) {
+                $("#register .modal-alert-danger").removeClass("hide").addClass("show");
+            } else {
+                $("#register .modal-alert-danger").removeClass("show").addClass("hide").empty();
+                $("#frmRegister input.error").removeClass("error");
+            }
+            this.defaultShowErrors();
+        },
+        submitHandler: function () {
+            register();
+        }
+    })
+
+    let btnRegister = $('#btnRegister');
+    btnRegister.on('click', () => {
+        $("#frmRegister").submit();
+    });
+
+    function removeEvent() {
+        $("#btnLogin").off();
+        $("#btnRegister").off();
+    }
+</script>
+</body>
+</html>

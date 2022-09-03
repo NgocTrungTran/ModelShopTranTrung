@@ -1,0 +1,325 @@
+﻿<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+
+<head>
+    <title>Model Shop</title>
+    <th:block th:replace="/layout/head :: head"/>
+</head>
+
+<body class="footer-offset">
+<th:block th:replace="/layout/builder :: builder"/>
+
+<th:block th:replace="/layout/header_body :: headerBody"/>
+
+<th:block th:replace="/layout/left_bar :: leftBar"/>
+
+
+<main id="content" role="main" class="main">
+
+    <!-- Content -->
+    <div class="content container-fluid">
+        <!-- Page Header -->
+        <div class="page-header">
+            <div class="row align-items-end">
+                <div class="col-sm mb-2 mb-sm-0">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb breadcrumb-no-gutter">
+                            <li class="breadcrumb-item"><a class="breadcrumb-link" href="javascript:;">Admin</a></li>
+                            <li class="breadcrumb-item"><a class="breadcrumb-link" href="javascript:;">User</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Recycle bin</li>
+                        </ol>
+                    </nav>
+
+                    <h1 class="page-header-title">Recycle bin</h1>
+                </div>
+            </div>
+            <!-- End Row -->
+        </div>
+        <!-- End Page Header -->
+
+        <!-- Card -->
+        <div class="card">
+            <!-- Header -->
+            <div class="card-header">
+                <div class="row justify-content-between align-items-center flex-grow-1">
+                    <div class="col-sm-6 col-md-4 mb-3 mb-sm-0">
+                        <form>
+                            <!-- Search -->
+                            <div class="input-group input-group-merge input-group-flush">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <i class="tio-search"></i>
+                                    </div>
+                                </div>
+                                <input id="datatableSearch" type="search" class="form-control"
+                                       placeholder="Search users"
+                                       aria-label="Search users">
+                            </div>
+                            <!-- End Search -->
+                        </form>
+                    </div>
+                </div>
+                <!-- End Row -->
+            </div>
+            <!-- End Header -->
+
+            <!-- Table -->
+            <div class="table-responsive datatable-custom">
+                <table id="table-user"
+                       class="table table-lg table-borderless table-thead-bordered table-nowrap table-align-middle card-table">
+                    <thead class="thead-light">
+                    <tr>
+                        <th class="table-column-pl-0 text-center">Name</th>
+                        <th>Username</th>
+                        <th>Phone</th>
+                        <th>Coin (VND)</th>
+                        <th>Status</th>
+                        <th class="text-center">Action</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+            <!-- End Table -->
+        </div>
+        <!-- End Card -->
+    </div>
+    <!-- End Content -->
+
+    <!-- Footer -->
+
+    <th:block th:replace="/layout/footer :: footer"/>
+
+    <!-- End Footer -->
+
+    <!--    Modal start -->
+
+</main>
+<!-- ========== END MAIN CONTENT ========== -->
+<th:block th:replace="/layout/script :: script"/>
+<script src="/assets/js/model.js"></script>
+<script src="/assets/js/app.page.js"></script>
+<script>
+    let page = {
+        urls: {
+            getAllUsersTrash: App.BASE_URL_USER_TRASH
+        }
+    }
+
+    let user;
+
+    function init() {
+        getAllUsersTrash();
+    }
+    init();
+
+
+
+    function getAllUsersTrash() {
+        $.ajax({
+            headers: {
+                "accept": "application/json",
+                "content-type": "application/json"
+            },
+            type: "GET",
+            url: page.urls.getAllUsersTrash
+        })
+            .done((data) => {
+                showListTrashUser(data);
+            })
+            .fail((jqXHR) => {
+                $('#table-user tbody').empty();
+
+                console.log(jqXHR.responseJSON);
+                if (jqXHR.responseJSON.message) {
+                    let message = jqXHR.responseJSON.message;
+
+                    let str = `<td colspan="6" id="message-error" class="error text-center" >${message}</td>`;
+
+                    $("#table-user tbody").append(str);
+                }
+            })
+    }
+
+
+    function getUserById(id) {
+        return $.ajax({
+            headers: {
+                "Accept": "application/json",
+                "Content-type": "application/json"
+            },
+            type: "GET",
+            url: 'http://localhost:8080/api/users/' + id
+        })
+            .done((data) => {
+                user = data;
+            })
+            .fail((jqXHR) => {
+                console.log(jqXHR);
+                $('#mainErr').empty();
+
+                $("#mainErr").addClass('show').removeClass('hide');
+
+                if (jqXHR.responseJSON.message) {
+                    let message = jqXHR.responseJSON.message;
+                    console.log(message);
+
+                    Swal.fire({
+                        title: message,
+                        icon: 'warning',
+                        showConfirmButton: false,
+                        timer: 2000
+                    })
+
+                    // let str = `<label id="message-error" class="error" for="message">${message}</label>`;
+                    //
+                    // $("#mainErr").append(str);
+                }
+            });
+    }
+
+
+    //  Show list user
+    function showListTrashUser(data) {
+        $.each(data, (i, item) => {
+            user = item;
+            let str = `
+            <tr id="tr_${user.id}">
+                <td class="table-column-pl-0 text-center">
+                  <a class="d-flex align-items-start" style="margin-left: 30px;" href="user-profile.html">
+                    <div class="avatar avatar-soft-primary avatar-circle">
+                      <img class="avatar-initials" src="/images/avatar/${user.avatar}">
+                    </div>
+                    <div class="ml-3" style="text-align: left;">
+                      <span class="d-block h5 text-hover-primary mb-0">${user.fullName}</span>
+                      <span class="d-block font-size-sm text-body">${user.email}</span>
+                    </div>
+                  </a>
+                </td>
+                <td>
+                  <span class="d-block h5 mb-0">${user.username}</span>
+                </td>
+                <td>${user.phone}</td>
+                <td>
+                  ${formatCash(user.coin)}
+                </td>
+                <td>
+                  <div class="d-flex align-items-center" id="status">
+                    ${checkStatus(user.blocked)}
+                  </div>
+                </td>
+                <td class="text-center">
+                  <button class="btn btn-sm btn-outline-success restore" data-id="${user.id}" data-bs-toggle="tooltip"
+                                    data-bs-placement="top" data-bs-title="Restore">
+                    <i class="fa fa-window-restore" aria-hidden="true"></i> Restore
+                  </button>
+                </td>
+            </tr>
+        `;
+
+            $("#table-user tbody").prepend(str);
+
+            handleShowModal();
+        });
+    }
+
+    //Remove even show
+    function removeEventShowModal() {
+        $(".restore").off();
+    }
+
+    // handle show Modal
+    function handleShowModal() {
+        removeEventShowModal();
+
+        handleShowRestore();
+    }
+
+    // remove user
+    function handleShowRestore() {
+
+        let btnRestore = $(".restore");
+
+        btnRestore.on('click', function () {
+            console.log("remove");
+            let id = $(this).data('id');
+
+            doRestore(id);
+        })
+    }
+
+    function doRestore(userId) {
+        getUserById(userId).then(() => {
+            Swal.fire({
+                title: `Do you want restore '${user.fullName}'?`,
+                text: "The data will be moved to the user overview!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#198754',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, restore!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        headers: {
+                            "Accept": "application/json",
+                            "Content-type": "application/json"
+                        },
+                        type: "PATCH",
+                        url: 'http://localhost:8080/api/users/restore',
+                        data: JSON.stringify(user)
+                    })
+                        .done((data) => {
+                            $('#table-user tbody').empty();
+                            getAllUsersTrash();
+
+                            Swal.fire({
+                                position: 'top-end',
+                                icon: 'success',
+                                title: `User '${user.fullName}' has been restore`,
+                                showConfirmButton: false,
+                                timer: 2000
+                            })
+                        })
+                        .fail((jqXHR) => {
+                            console.log(jqXHR);
+                        });
+                }
+            })
+                .catch(() => {
+                    Swal.fire({
+                        title: "User invalid",
+                        icon: 'error',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                });
+        })
+    }
+
+
+    // format money
+    function formatCash(coin) {
+        let str = coin.toString();
+        return str.split('').reverse().reduce((prev, next, index) => {
+            return ((index % 3) ? next : (next + ',')) + prev;
+        });
+    }
+
+    // check status blocked
+    function checkStatus(blocked) {
+        if (blocked === false) {
+            return '<span class="legend-indicator bg-success"></span>Active';
+        }
+        if (blocked === true) {
+            return '<span class="legend-indicator bg-danger"></span>Blocked';
+        }
+    }
+</script>
+</body>
+
+</html>

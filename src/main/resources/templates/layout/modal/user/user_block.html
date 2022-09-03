@@ -1,0 +1,50 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<th:block th:fragment="user_block">
+    <!-- Block user Modal -->
+    <div class="modal fade" id="mdBlock" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
+         aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: #da4949; padding: 12px;">
+                    <h3 style="color: white" class="modal-title">Do you want block this user?</h3>
+                    <button type="button" class="btn-close btnClose" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="modal-alert-danger hide" id="blockErr"></div>
+                    <form id="frmBlock" action="" method="post">
+                        <div class="row mt-6">
+                            <input type="hidden" id="idUserBlo" name="idUserBlo" class="form-control" readonly>
+                            <div class="col-lg-6">
+                                <label for="fullNameBlo" class="fw-bold">Full name</label>
+                                <input type="text" id="fullNameBlo" name="fullNameBlo" class="form-control" readonly>
+                            </div>
+                            <div class="col-lg-6">
+                                <label for="phoneBlo" class="fw-bold"><strong>Phone</strong></label>
+                                <input type="text" id="phoneBlo" name="phoneBlo" class="form-control" readonly>
+                            </div>
+                        </div>
+                        <div class="row mt-6">
+                            <div class="col-lg-6">
+                                <label for="usernameBlo" class="fw-bold"><strong>Username</strong></label>
+                                <input type="text" id="usernameBlo" name="usernameBlo" class="form-control" readonly>
+                            </div>
+                            <div class="col-lg-6">
+                                <label for="emailBlo" class="fw-bold">Email</label>
+                                <input type="text" id="emailBlo" name="emailBlo" class="form-control" readonly>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer" style="background-color: #f3f3f3; padding: 12px;">
+                    <button type="button" class="btn btn-secondary btnClose" data-bs-dismiss="modal">Close</button>
+                    <button type="button" id="btnBlock" class="btn btn-outline-danger">
+                        <i class="fa fa-ban"></i>
+                        Block
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Block user Modal -->
+</th:block>

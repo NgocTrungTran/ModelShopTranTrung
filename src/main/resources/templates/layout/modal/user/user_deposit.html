@@ -1,0 +1,51 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<th:block th:fragment="user_deposit">
+    <!-- Deposit user Modal -->
+    <div class="modal fade" id="mdDeposit" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
+         aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: #377dff; padding: 12px;">
+                    <h3 style="color: white" class="modal-title">Update Coin</h3>
+                    <button type="button" class="btn-close btnClose" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="modal-alert-danger hide col-4" id="depositErr"></div>
+                    <form id="frmDeposit" action="" method="post">
+                        <div class="row mt-3">
+                            <div class="col-lg-6">
+                                <label for="idUserDep" class="fw-bold"><strong>User Id</strong></label>
+                                <input type="text" id="idUserDep" name="idUserDep" class="form-control" readonly>
+                            </div>
+                            <div class="col-lg-6">
+                                <label for="fullNameUserDep" class="fw-bold">Full Name</label>
+                                <input type="text" id="fullNameUserDep" name="fullNameUserDep" class="form-control" readonly>
+                            </div>
+                        </div>
+                        <div class="row mt-3 mb-3">
+                            <div class="col-lg-6">
+                                <label for="balanceUserDep" class="fw-bold">Current Coin ($)</label>
+                                <input type="text" id="balanceUserDep" name="balanceUserDep" class="form-control" readonly>
+                            </div>
+                            <div class="col-lg-6">
+                                <label for="transactionAmountDep" class="fw-bold">Transaction Amount ($)</label>
+                                <input type="text" id="transactionAmountDep" name="transactionAmountDep"
+                                       class="form-control"
+                                       placeholder="Transaction amount between 100.000 and 100.000.000 VND">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer" style="background-color: #f3f3f3; padding: 12px;">
+                    <button type="button" class="btn btn-secondary btnClose" data-bs-dismiss="modal">Close</button>
+                    <button type="button" id="btnDeposit" class="btn btn-outline-primary">
+                        <i class="fa fa-plus" aria-hidden="true"></i>
+                        Update
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Deposit user Modal -->
+</th:block>

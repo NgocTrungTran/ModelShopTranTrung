@@ -1,0 +1,114 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<th:block th:fragment="admin_edit">
+    <!-- Create User Modal -->
+    <div class="modal fade" id="mdEdit" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
+         aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: #377dff; padding: 12px;">
+                    <h3 style="color: white" class="modal-title">Edit</h3>
+                    <button type="button" class="btn-close btnClose" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="modal-alert-danger hide col-3" id="createErr"></div>
+                    <form id="frmEdit" action="" method="post">
+                        <div class="card-body">
+
+                            <div class="row form-group">
+                                <label class="col-sm-3 col-form-label input-label fw-bold" for="avatarAdminEdit">Avatar</label>
+
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" id="avatarAdminEdit" placeholder="URL avatar">
+                                </div>
+                            </div>
+
+                            <div class="row form-group">
+                                <label for="usernameAdminEdit" class="col-sm-3 col-form-label input-label fw-bold">Username</label>
+
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" name="usernameAdminEdit" id="usernameAdminEdit"
+                                           placeholder="username" aria-label="usernameEdit">
+                                </div>
+                            </div>
+
+                            <div class="row form-group">
+                                <label for="passwordAdminEdit" class="col-sm-3 col-form-label input-label fw-bold">Password</label>
+                                <div class="input-group input-group-merge col-sm-9">
+                                    <input type="password"
+                                           class="js-toggle-password form-control form-control-lg"
+                                           name="passwordAdminEdit" id="passwordAdminEdit" placeholder="8+ characters required"
+                                           aria-label="8+ characters required" required=""
+                                           data-hs-toggle-password-options="{
+                               &quot;target&quot;: [&quot;.js-toggle-password-target-1&quot;, &quot;.js-toggle-password-target-2&quot;],
+                               &quot;defaultClass&quot;: &quot;tio-hidden-outlined&quot;,
+                               &quot;showClass&quot;: &quot;tio-visible-outlined&quot;,
+                               &quot;classChangeTarget&quot;: &quot;.js-toggle-password-show-icon-1&quot;
+                             }" aria-invalid="false">
+                                    <div class="js-toggle-password-target-1 input-group-append"
+                                         style="margin-right: 15px; text-align: center; background-color: #e0e0e0; width: 50px;">
+                                        <a class="input-group-text" href="javascript:;" style="width: 100%; padding: 0;">
+                                            <i style="margin-left: 15px; font-size: 20px;" class="js-toggle-password-show-icon-1 tio-hidden-outlined"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row form-group">
+                                <label for="fullNameAdminEdit" class="col-sm-3 col-form-label input-label fw-bold">Full name </label>
+
+                                <div class="col-sm-9">
+                                    <div class="input-group input-group-sm-down-break">
+                                        <input type="text" class="form-control" name="fullNameAdminEdit" id="fullNameAdminEdit"
+                                               placeholder="Full name" aria-label="fullNameAdmin">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row form-group">
+                                <label for="emailAdminEdit" class="col-sm-3 col-form-label input-label fw-bold">Email</label>
+
+                                <div class="col-sm-9">
+                                    <input type="email" class="form-control" name="emailAdminEdit" id="emailAdminEdit"
+                                           placeholder="milotran@example.com" aria-label="clarice@example.com">
+                                </div>
+                            </div>
+
+                            <div class="row mt-3">
+                                <div class="col-lg-6">
+                                    <label for="provinceAdminEdit" class="fw-bold">Province</label>
+                                    <select name="provinceAdminEdit" id="provinceAdminEdit" class="form-select">
+                                    </select>
+                                </div>
+                                <div class="col-lg-6">
+                                    <label for="districtAdminEdit" class="fw-bold">District</label>
+                                    <select name="districtAdminEdit" id="districtAdminEdit" class="form-select">
+                                    </select>
+                                </div>
+                                <div class="col-lg-6">
+                                    <label for="wardAdminEdit" class="fw-bold">Ward</label>
+                                    <select name="wardAdminEdit" id="wardAdminEdit" class="form-select">
+                                    </select>
+                                </div>
+                                <div class="col-lg-6">
+                                    <label for="addressAdminEdit" class="fw-bold">Address</label>
+                                    <input type="text" id="addressAdminEdit" name="addressAdminEdit" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btnClose" data-bs-dismiss="modal">Close</button>
+                    <button type="button" id="btnCreate" class="btn btn-outline-success">
+                        <i class="fa fa-plus" aria-hidden="true"></i>
+                        Create
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Deposit user Modal -->
+</th:block>
+
+

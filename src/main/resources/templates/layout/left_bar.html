@@ -1,0 +1,151 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<th:block th:fragment="leftBar">
+<div id="sidebarMain" class="d-none">
+    <aside
+            class="js-navbar-vertical-aside navbar navbar-vertical-aside navbar-vertical navbar-vertical-fixed navbar-expand-xl navbar-bordered  " style="float: left;">
+        <div class="navbar-vertical-container">
+            <div class="navbar-vertical-footer-offset">
+                <div class="navbar-brand-wrapper justify-content-between">
+                    <video autoplay muted>
+                        <source src="/videos/modelcut.mp4" type="video/mp4">
+                    </video>
+                </div>
+
+                <!-- Content -->
+                <div class="navbar-vertical-content">
+                    <ul class="navbar-nav navbar-nav-lg nav-tabs">
+                        <!-- Dashboards -->
+                        <li class="navbar-vertical-aside-has-menu ">
+                            <a class="js-navbar-vertical-aside-menu-link nav-link nav-link-toggle " href="javascript:;"
+                               title="Dashboards">
+                                <i class="tio-home-vs-1-outlined nav-icon"></i>
+                                <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">Dashboards</span>
+                            </a>
+
+                            <ul class="js-navbar-vertical-aside-submenu nav nav-sub">
+                                <li class="nav-item">
+                                    <a class="nav-link" title="Default">
+                                        <span class="tio-circle nav-indicator-icon"></span>
+                                        <span class="text-truncate">Products</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link " href="dashboard-alternative.html" title="Alternative">
+                                        <span class="tio-circle nav-indicator-icon"></span>
+                                        <span class="text-truncate">Users</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <!-- End Dashboards -->
+
+                        <li class="nav-item">
+                            <small class="nav-subtitle" title="Pages">Pages</small>
+                            <small class="tio-more-horizontal nav-subtitle-replacer"></small>
+                        </li>
+
+                        <!-- Pages -->
+                        <li class="navbar-vertical-aside-has-menu show">
+                            <a class="js-navbar-vertical-aside-menu-link nav-link nav-link-toggle active" href="javascript:;"
+                               title="Pages">
+                                <i class="tio-pages-outlined nav-icon"></i>
+                                <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">Admin</span>
+                            </a>
+
+                            <ul class="js-navbar-vertical-aside-submenu nav nav-sub">
+                                <li class="navbar-vertical-aside-has-menu show">
+                                    <a class="js-navbar-vertical-aside-menu-link nav-link nav-link-toggle" href="javascript:;"
+                                       title="Users">
+                                        <span class="tio-circle nav-indicator-icon"></span>
+                                        <span class="text-truncate">Users</span>
+                                    </a>
+
+                                    <ul class="js-navbar-vertical-aside-submenu nav nav-sub">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" th:href="@{'/admin/' + ${admin.username} + '/user'}" title="Overview">
+                                                <span class="tio-circle-outlined nav-indicator-icon"></span>
+                                                <span class="text-truncate">Overview</span>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link " th:href="@{'/admin/' + ${admin.username} + '/user/recycle-bin'}" title="Recycle bin">
+                                                <span class="tio-circle-outlined nav-indicator-icon"></span>
+                                                <span class="text-truncate">Recycle bin</span>
+                                            </a>
+                                        </li>
+
+                                    </ul>
+                                </li>
+
+                                <li class="navbar-vertical-aside-has-menu ">
+                                    <a class="js-navbar-vertical-aside-menu-link nav-link nav-link-toggle" href="javascript:;"
+                                       title="Account">
+                                        <span class="tio-circle nav-indicator-icon"></span>
+                                        <span class="text-truncate">Product</span>
+                                    </a>
+
+                                    <ul class="js-navbar-vertical-aside-submenu nav nav-sub">
+                                        <li class="nav-item">
+                                            <a class="nav-link " th:href="@{'/admin/' + ${admin.username} + '/product'}" title="Settings">
+                                                <span class="tio-circle-outlined nav-indicator-icon"></span>
+                                                <span class="text-truncate">List</span>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link " href="account-billing.html" title="Billing">
+                                                <span class="tio-circle-outlined nav-indicator-icon"></span>
+                                                <span class="text-truncate">Garbage can</span>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link " href="account-invoice.html" title="Invoice">
+                                                <span class="tio-circle-outlined nav-indicator-icon"></span>
+                                                <span class="text-truncate">History</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+
+                            </ul>
+                        </li>
+                        <!-- End Pages -->
+
+
+                        <li class="nav-item">
+                            <small class="tio-more-horizontal nav-subtitle-replacer"></small>
+                        </li>
+
+                        <!-- Front Builder -->
+                        <li class="nav-item nav-footer-item ">
+                            <a class="d-none d-md-flex js-hs-unfold-invoker nav-link nav-link-toggle" href="javascript:;"
+                               data-hs-unfold-options='{
+                 "target": "#styleSwitcherDropdown",
+                 "type": "css-animation",
+                 "animationIn": "fadeInRight",
+                 "animationOut": "fadeOutRight",
+                 "hasOverlay": true,
+                 "smartPositionOff": true
+               }'>
+                                <i class="tio-tune nav-icon"></i>
+                            </a>
+                            <a class="d-flex d-md-none nav-link nav-link-toggle" href="javascript:;">
+                                <i class="tio-tune nav-icon"></i>
+                            </a>
+                        </li>
+                        <!-- End Front Builder -->
+
+                    </ul>
+                </div>
+                <!-- End Content -->
+
+            </div>
+        </div>
+    </aside>
+</div>
+<div id="sidebarCompact" class="d-none">
+    <aside
+            class="js-navbar-vertical-aside navbar navbar-vertical-aside navbar-vertical navbar-vertical-fixed navbar-expand-xl navbar-bordered  ">
+
+    </aside>
+</div>
+</th:block>

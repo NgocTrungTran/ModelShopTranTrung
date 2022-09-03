@@ -1,0 +1,72 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<th:block th:fragment="product_create">
+    <!-- Create Product Modal -->
+    <div class="modal fade" id="mdCreate" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
+         aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: #377dff; padding: 12px;">
+                    <h3 style="color: white" class="modal-title">Create Product</h3>
+                    <button type="button" class="btn-close btnClose" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="modal-alert-danger hide" id="createErr"></div>
+                    <form id="frmCreate" action="" method="post">
+                        <div class="card-body">
+                            <div class="row form-group">
+                                <label for="titleCreate" class="col-sm-3 col-form-label input-label">Title</label>
+                                <div class="col-sm-9">
+                                    <div class="input-group input-group-sm-down-break">
+                                        <input type="text" class="form-control" name="titleCreate" id="titleCreate"
+                                               placeholder="Product title" aria-label="Product title">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <label for="imageCreate"
+                                       class="col-sm-3 col-form-label input-label">Image</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" name="imageCreate" id="imageCreate"
+                                           placeholder="Product's Image" aria-label="Image">
+                                </div>
+                            </div>
+
+                            <div class="row form-group">
+                                <label for="priceCreate" class="col-sm-3 col-form-label input-label">Price
+                                    (VND) </label>
+                                <div class="col-sm-9">
+                                    <div class="input-group input-group-sm-down-break">
+                                        <input type="text" class="form-control" name="priceCreate" id="priceCreate"
+                                               placeholder="Product's price" aria-label="Product's price">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row form-group">
+                                <label for="categoryCreate"
+                                       class="col-sm-3 col-form-label input-label">Category</label>
+
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" name="categoryCreate"
+                                           id="categoryCreate"
+                                           placeholder="Category" aria-label="Category">
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btnClose" data-bs-dismiss="modal">Close</button>
+                    <button type="button" id="btnCreate" class="btn btn-outline-primary">
+                        <i class="fa fa-plus" aria-hidden="true"></i>
+                        Create
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Product user Modal -->
+</th:block>
+
+

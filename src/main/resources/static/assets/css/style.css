@@ -1,0 +1,68 @@
+.navbar-vertical-aside .navbar-brand-wrapper {
+    height: 150px;
+    /* background-color: red; */
+    padding: 0;
+    border: none;
+}
+
+.navbar-brand-wrapper video {
+    width: 100%;
+    height: 150px;
+}
+.navbar-vertical-content {
+    background-color: #eaeaea;
+}
+
+.show {
+    display: block;
+}
+
+.hide {
+    display: none;
+}
+
+.modal-alert-danger {
+    background-color: #ffa4a4;
+    border-radius: 10px;
+    position: fixed;
+    top: 1vh;
+    left: 1vh;
+}
+
+label.error {
+    color: #ff0015;
+    font-style: italic;
+    font-size: small;
+}
+
+.displayErr {
+    display: flex;
+    justify-content: space-between;
+}
+#createErr label.error, #depositErr label.error , #editErr label.error{
+    color: #5e0008;
+    font-style: italic;
+    font-weight: bold;
+    font-size: medium;
+    margin-left: 10px;
+    margin-top: 10px;
+}
+.profile-admin{
+    border: none;
+    background-color: white;
+    width: 100%;
+    text-align: left;
+    padding: 6px 24px;
+}
+
+.profile-admin:hover{
+    border: none;
+    background-color: #e9ecef;
+    width: 100%;
+    text-align: left;
+    padding: 6px 24px;
+}
+
+#frmProfileAdmin i {
+    cursor: pointer;
+}
