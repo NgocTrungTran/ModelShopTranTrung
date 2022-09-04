@@ -1,6 +1,7 @@
 package com.tnt.modelshoptrantrung.model;
 
 
+import com.tnt.modelshoptrantrung.model.dto.ProductDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -40,4 +41,16 @@ public class Product extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "category_id", referencedColumnName = "id", nullable = false)
     private Category category;
+
+    public ProductDTO toProductDTO() {
+        return new ProductDTO ()
+                .setId ( id )
+                .setTitle ( title )
+                .setSlug ( slug )
+                .setImage ( image )
+                .setSold ( sold )
+                .setViewed ( view )
+                .setPrice ( price )
+                .setCategory ( category.toCategoryDTO () );
+    }
 }

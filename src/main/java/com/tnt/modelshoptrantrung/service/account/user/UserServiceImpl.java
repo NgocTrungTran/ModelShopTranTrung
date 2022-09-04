@@ -59,6 +59,16 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    public List<UserDTO> findAllUsersDTODeletedFalseAndActiveTrue() {
+        return userRepository.findAllUsersDTODeletedFalseAndActiveTrue ();
+    }
+
+    @Override
+    public List<UserDTO> findAllUsersDTODeletedFalseAndActiveFalse() {
+        return userRepository.findAllUsersDTODeletedFalseAndActiveFalse ();
+    }
+
+    @Override
     public Boolean existsByUsername(String username) {
         return userRepository.existsByUsername ( username );
     }

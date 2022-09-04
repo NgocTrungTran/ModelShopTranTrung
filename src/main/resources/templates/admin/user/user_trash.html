@@ -52,7 +52,7 @@
                                         <i class="tio-search"></i>
                                     </div>
                                 </div>
-                                <input id="datatableSearch" type="search" class="form-control"
+                                <input id="searchTable" type="search" class="form-control"
                                        placeholder="Search users"
                                        aria-label="Search users">
                             </div>
@@ -66,7 +66,7 @@
 
             <!-- Table -->
             <div class="table-responsive datatable-custom">
-                <table id="table-user"
+                <table id="table-user-trash"
                        class="table table-lg table-borderless table-thead-bordered table-nowrap table-align-middle card-table">
                     <thead class="thead-light">
                     <tr>
@@ -132,7 +132,7 @@
                 showListTrashUser(data);
             })
             .fail((jqXHR) => {
-                $('#table-user tbody').empty();
+                $('#table-user-trash tbody').empty();
 
                 console.log(jqXHR.responseJSON);
                 if (jqXHR.responseJSON.message) {
@@ -140,7 +140,7 @@
 
                     let str = `<td colspan="6" id="message-error" class="error text-center" >${message}</td>`;
 
-                    $("#table-user tbody").append(str);
+                    $("#table-user-trash tbody").append(str);
                 }
             })
     }
@@ -221,7 +221,7 @@
             </tr>
         `;
 
-            $("#table-user tbody").prepend(str);
+            $("#table-user-trash tbody").prepend(str);
 
             handleShowModal();
         });
@@ -274,7 +274,7 @@
                         data: JSON.stringify(user)
                     })
                         .done((data) => {
-                            $('#table-user tbody').empty();
+                            $('#table-user-trash tbody').empty();
                             getAllUsersTrash();
 
                             Swal.fire({
@@ -319,6 +319,16 @@
             return '<span class="legend-indicator bg-danger"></span>Blocked';
         }
     }
+
+    //search filter JQuery
+    $(document).ready(function(){
+        $("#searchTable").on("keyup", function() {
+            let value = $(this).val().toLowerCase();
+            $("#table-user-trash tbody tr").filter(function() {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
 </script>
 </body>
 

@@ -13,26 +13,27 @@
 </head>
 <body>
 <div class="background">
-    <img style="width: 100%" src="/images/background/gundam.jpg">
+    <img style="width: 100%" src="/images/login_background.png">
 </div>
 <div class="materialContainer">
 
-    <div class="box">
+    <div class="box" id="login">
+        <div class="modal-alert-danger hide col-8"></div>
 
         <div class="title">LOGIN</div>
+        <form id="frmLogin" action="" method="post">
+            <div class="input">
+                <label for="userLog" class="userLog">Username</label>
+                <input type="text" name="userLog" id="userLog">
+                <span class="spin"></span>
+            </div>
 
-        <div class="input">
-            <label for="userLog" class="userLog">Username</label>
-            <input type="text" name="userLog" id="userLog">
-            <span class="spin"></span>
-        </div>
-
-        <div class="input">
-            <label for="passLog" class="passLog">Password</label>
-            <input type="password" name="passLog" id="passLog">
-            <span class="spin"></span>
-        </div>
-
+            <div class="input">
+                <label for="passLog" class="passLog">Password</label>
+                <input type="password" name="passLog" id="passLog">
+                <span class="spin"></span>
+            </div>
+        </form>
         <div class="button login" id="btnLogin">
             <button type="button"><span>GO</span></button>
         </div>
@@ -75,11 +76,7 @@
 <script src="/assets/js/login.js">
 </script>
 <script>
-    init();
-
-    function init() {
-        login();
-    }
+    const key_enter = 13;
 
     function login() {
         $("#btnLogin").on('click', () => {
@@ -101,13 +98,113 @@
                 data: JSON.stringify(user)
             })
                 .done(() => {
-                    location.href = "/admin/" + username + "/user";
+
+                    Swal.fire({
+                        // position: 'top-end',
+                        icon: 'success',
+                        title: 'Welcome to ModelShop',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+
+                    setTimeout(function() {
+                        let str = "<div style='line-height: 100vh; text-align: center;'>" +
+                            "<img style='width: 100px; height: 100px; margin: auto' src='/images/loading.gif'>" +
+                            "</div>";
+                        $('body').empty().append(str);
+                    }, 2000);
+
+                    setTimeout(function() {
+                        location.href = "/admin/" + username + "/user";
+                    }, 4000);
+
+
                 })
-                .fail(() => {
-                    alert("Error")
+                .fail((jqXHR) => {
+                    console.log(jqXHR);
+                    $('.box .modal-alert-danger').fadeIn(1000).empty().addClass('show').removeClass('hide').fadeOut(4000, () => {
+                        $('.modal-alert-danger').empty().removeClass('show').addClass('hide');
+                    });
+
+                    if (jqXHR.responseJSON.message) {
+                        // removeEvent();
+
+                        let message = jqXHR.responseJSON.message;
+
+                        let str = `<div id="message-error" class="registerErr">
+                                        <label class="error" for="message">
+                                          <i class="fa fa-exclamation" aria-hidden="true"></i>
+                                          ${message}
+                                        </label>
+                                        <i class="btn-close" id="closeMess" aria-hidden="true"></i>
+                                    </div>`;
+
+                        $(".box .modal-alert-danger").append(str);
+
+                        closeMessage();
+                    } else if (jqXHR.responseJSON) {
+                        $.each(jqXHR.responseJSON, (key, item) => {
+                            let str = `<div id="${key}-error" class="displayErr">
+                                        <i class="fa fa-exclamation" aria-hidden="true"></i>
+
+                                        <label class="error" for="${key}De">${item}</label>
+                                        <i class="fa fa-times closeErr" aria-hidden="true"></i>
+                                        </div>`;
+                            $("#" + key).addClass("error");
+
+                            $(".box .modal-alert-danger").append(str);
+
+                            closeError(key);
+                        })
+                    }
                 })
         })
     }
+
+    $(".box").on('hidden.bs.modal', () => {
+        $(".box .modal-alert-danger").removeClass("show").addClass("hide");
+        $("#frmLogin").validate().resetForm();
+    })
+
+    $('#frmLogin').validate({
+        rules: {
+            userLog: {
+                required: true,
+            },
+            passLog: {
+                required: true,
+            }
+        },
+        messages: {
+            userLog: {
+                required: "(Please enter username)",
+            },
+            passLog: {
+                required: "(Please enter password)",
+            }
+        },
+        errorLabelContainer: "#register .modal-alert-danger",
+        errorPlacement: function (error, element) {
+            error.appendTo("#register .modal-alert-danger");
+        },
+        showErrors: function (errorMap, errorList) {
+            if (this.numberOfInvalids() > 0) {
+                $("#login .modal-alert-danger").removeClass("hide").addClass("show");
+            } else {
+                $("#login .modal-alert-danger").removeClass("show").addClass("hide").empty();
+                $("#frmLogin input.error").removeClass("error");
+            }
+            this.defaultShowErrors();
+        },
+        submitHandler: function () {
+            login();
+        }
+    })
+    let btnLogin = $('#btnLogin');
+    btnLogin.on('click', () => {
+        $("#frmLogin").submit();
+    });
+
 
     function register() {
         $("#btnRegister").on('click', () => {
@@ -145,20 +242,19 @@
                     $('#passLog').val(password).focus();
 
                     $('.userLog').css('line-height', '18px')
+                        .css('font-size', '18px')
+                        .css('font-weight', '100')
+                        .css('top', '0px');
+
+                    $('.passLog').css('line-height', '18px')
                                 .css('font-size', '18px')
                                 .css('font-weight', '100')
                                 .css('top', '0px');
-
-                    $('.passLog').css('line-height', '18px');
-                    $('.passLog').css('font-size', '18px');
-                    $('.passLog').css('font-weight', '100');
-                    $('.passLog').css('top', '0px');
 
                     $('#frmRegister')[0].reset();
 
                 })
                 .fail((jqXHR) => {
-                    console.log(jqXHR);
                     $('.overbox .modal-alert-danger').fadeIn(1000).empty().addClass('show').removeClass('hide').fadeOut(3000, () => {
                         $('.modal-alert-danger').empty().removeClass('show').addClass('hide');
                     });
@@ -218,7 +314,7 @@
         $("#frmRegister").validate().resetForm();
     })
 
-    $("#frmRegister").validate({
+    $('#frmRegister').validate({
         rules: {
             regname: {
                 required: true,
@@ -278,6 +374,13 @@
         $("#btnLogin").off();
         $("#btnRegister").off();
     }
+
+    function pressEnter(e) {
+        if (e.keyCode === key_enter) {
+            $("#frmLogin").submit();
+        }
+    }
+
 </script>
 </body>
 </html>

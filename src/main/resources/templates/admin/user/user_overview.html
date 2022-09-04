@@ -48,7 +48,7 @@
 
         <!-- Stats -->
         <div class="row gx-2 gx-lg-3">
-            <div class="col-sm-6 col-lg-3 mb-3 mb-lg-5">
+            <div class="col-sm-6 col-lg-3 mb-3 mb-lg-5" id="allList" style="cursor: pointer">
                 <!-- Card -->
                 <div class="card h-100">
                     <div class="card-body">
@@ -56,14 +56,7 @@
 
                         <div class="row align-items-center gx-2">
                             <div class="col">
-                                <span class="js-counter display-4 text-dark">24</span>
-                                <span class="text-body font-size-sm ml-1">from 22</span>
-                            </div>
-
-                            <div class="col-auto">
-                  <span class="badge badge-soft-success p-1">
-                    <i class="tio-trending-up"></i> 5.0%
-                  </span>
+                                <span class="js-counter display-4 text-dark total-user"></span>
                             </div>
                         </div>
                         <!-- End Row -->
@@ -72,22 +65,15 @@
                 <!-- End Card -->
             </div>
 
-            <div class="col-sm-6 col-lg-3 mb-3 mb-lg-5">
+            <div class="col-sm-6 col-lg-3 mb-3 mb-lg-5" id="activeList" style="cursor: pointer">
                 <!-- Card -->
                 <div class="card h-100">
                     <div class="card-body">
-                        <h6 class="card-subtitle mb-2">Active members</h6>
+                        <h6 class="card-subtitle mb-2">Active users</h6>
 
                         <div class="row align-items-center gx-2">
                             <div class="col">
-                                <span class="js-counter display-4 text-dark">12</span>
-                                <span class="text-body font-size-sm ml-1">from 11</span>
-                            </div>
-
-                            <div class="col-auto">
-                  <span class="badge badge-soft-success p-1">
-                    <i class="tio-trending-up"></i> 1.2%
-                  </span>
+                                <span class="js-counter display-4 text-dark active-user"></span>
                             </div>
                         </div>
                         <!-- End Row -->
@@ -96,46 +82,15 @@
                 <!-- End Card -->
             </div>
 
-            <div class="col-sm-6 col-lg-3 mb-3 mb-lg-5">
+            <div class="col-sm-6 col-lg-3 mb-3 mb-lg-5" id="blockList" style="cursor: pointer">
                 <!-- Card -->
                 <div class="card h-100">
                     <div class="card-body">
-                        <h6 class="card-subtitle mb-2">New/returning</h6>
+                        <h6 class="card-subtitle mb-2">Block user</h6>
 
                         <div class="row align-items-center gx-2">
                             <div class="col">
-                                <span class="js-counter display-4 text-dark">56</span>
-                                <span class="display-4 text-dark">%</span>
-                                <span class="text-body font-size-sm ml-1">from 48.7</span>
-                            </div>
-
-                            <div class="col-auto">
-                  <span class="badge badge-soft-danger p-1">
-                    <i class="tio-trending-down"></i> 2.8%
-                  </span>
-                            </div>
-                        </div>
-                        <!-- End Row -->
-                    </div>
-                </div>
-                <!-- End Card -->
-            </div>
-
-            <div class="col-sm-6 col-lg-3 mb-3 mb-lg-5">
-                <!-- Card -->
-                <div class="card h-100">
-                    <div class="card-body">
-                        <h6 class="card-subtitle mb-2">Active members</h6>
-
-                        <div class="row align-items-center gx-2">
-                            <div class="col">
-                                <span class="js-counter display-4 text-dark">28.6</span>
-                                <span class="display-4 text-dark">%</span>
-                                <span class="text-body font-size-sm ml-1">from 28.6%</span>
-                            </div>
-
-                            <div class="col-auto">
-                                <span class="badge badge-soft-secondary p-1">0.0%</span>
+                                <span class="js-counter display-4 text-dark block-user"></span>
                             </div>
                         </div>
                         <!-- End Row -->
@@ -160,7 +115,7 @@
                                         <i class="tio-search"></i>
                                     </div>
                                 </div>
-                                <input id="datatableSearch" type="search" class="form-control"
+                                <input id="searchTable" type="search" class="form-control"
                                        placeholder="Search users"
                                        aria-label="Search users">
                             </div>
@@ -216,6 +171,12 @@
 
     <th:block th:replace="/layout/modal/user/user_active :: user_active"/>
 
+    <th:block th:replace="/layout/modal/user/user_profile :: user_profile"/>
+
+    <th:block th:replace="/layout/modal/user/user_history_deposit :: user_history_deposit"/>
+
+
+
 </main>
 <!-- ========== END MAIN CONTENT ========== -->
 <th:block th:replace="/layout/script :: script"/>
@@ -244,6 +205,7 @@
         const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
     }
 
+
     function getAllUsers() {
         $.ajax({
             headers: {
@@ -255,6 +217,22 @@
         })
             .done((data) => {
                 showListUser(data);
+                $('.total-user').text(`${data.length}`);
+
+                let countActiveUsers = [];
+                let countBlockedUsers = [];
+                let countTrashUsers = [];
+
+                $.each(data, (i, item) => {
+                    if (item.blocked === false) {
+                        countActiveUsers.push(item);
+                    }
+                    else {
+                        countBlockedUsers.push(item);
+                    }
+                })
+                $('.active-user').text(`${countActiveUsers.length}`);
+                $('.block-user').text(`${countBlockedUsers.length}`);
 
             })
             .fail((jqXHR) => {
@@ -270,6 +248,84 @@
                 }
             })
     }
+
+    $('#allList').on('click', () => {
+        $("#table-user tbody").empty();
+        $('#blockList').css("background", "#ffffff");
+        $('#activeList').css("background", "#ffffff");
+        $('#allList').css("background", "#e9e9e9");
+        getAllUsers();
+    })
+
+
+    function getAllUsersActive() {
+        $.ajax({
+            headers: {
+                "accept": "application/json",
+                "content-type": "application/json"
+            },
+            type: "GET",
+            url: page.urls.getAllUsers + "/active-list"
+        })
+            .done((data) => {
+                showListUser(data);
+            })
+            .fail((jqXHR) => {
+                $('#table-user tbody').empty();
+
+                console.log(jqXHR.responseJSON);
+                if (jqXHR.responseJSON.message) {
+                    let message = jqXHR.responseJSON.message;
+
+                    let str = `<td colspan="6" id="message-error" class="error text-center" >${message}</td>`;
+
+                    $("#table-user tbody").append(str);
+                }
+            })
+    }
+
+    $('#activeList').on('click', () => {
+        $("#table-user tbody").empty();
+        $('#allList').css("background", "#ffffff");
+        $('#blockList').css("background", "#ffffff");
+        $('#activeList').css("background", "#e9e9e9");
+        getAllUsersActive();
+    })
+
+    function getAllUsersBlock() {
+        $.ajax({
+            headers: {
+                "accept": "application/json",
+                "content-type": "application/json"
+            },
+            type: "GET",
+            url: page.urls.getAllUsers + "/block-list"
+        })
+            .done((data) => {
+                showListUser(data);
+            })
+            .fail((jqXHR) => {
+                $('#table-user tbody').empty();
+
+                console.log(jqXHR.responseJSON);
+                if (jqXHR.responseJSON.message) {
+                    let message = jqXHR.responseJSON.message;
+
+                    let str = `<td colspan="6" id="message-error" class="error text-center" >${message}</td>`;
+
+                    $("#table-user tbody").append(str);
+                }
+            })
+    }
+
+
+    $('#blockList').on('click', () => {
+        $("#table-user tbody").empty();
+        $('#allList').css("background", "#ffffff");
+        $('#activeList').css("background", "#ffffff");
+        $('#blockList').css("background", "#e9e9e9");
+        getAllUsersBlock();
+    })
 
     function getUserById(id) {
 
@@ -332,14 +388,55 @@
                         showConfirmButton: false,
                         timer: 2000
                     })
-
-                    // let str = `<label id="message-error" class="error" for="message">${message}</label>`;
-                    //
-                    // $("#mainErr").append(str);
                 }
             });
     }
 
+    // History deposit
+    function getHistoryDepositByUserID(id) {
+        return $.ajax({
+            headers: {
+                "Accept": "application/json",
+                "Content-type": "application/json"
+            },
+            type: "GET",
+            url: 'http://localhost:8080/api/users/deposit/' + id
+        })
+            .done((data) => {
+                $('.tbHistoryCoin tbody').empty();
+                $.each(data, (i, item) => {
+                    let str = `
+                        <tr>
+                            <td>${item.id}</td>
+                            <td>${item.createdBy}</td>
+                            <td>${item.fullName}</td>
+                            <td class="text-end">${formatCash(item.transactionAmount)}</td>
+                            <td>${item.createdAt}</td>
+                        </tr>
+                    `;
+
+                    $('.tbHistoryCoin tbody').prepend(str);
+                })
+            })
+            .fail((jqXHR) => {
+                console.log(jqXHR);
+                $('#mainErr').empty();
+
+                $("#mainErr").addClass('show').removeClass('hide');
+
+                if (jqXHR.responseJSON.message) {
+                    let message = jqXHR.responseJSON.message;
+                    console.log(message);
+
+                    Swal.fire({
+                        title: message,
+                        icon: 'warning',
+                        showConfirmButton: false,
+                        timer: 2000
+                    })
+                }
+            });
+    }
 
     //  Show list user
     function showListUser(data) {
@@ -348,7 +445,7 @@
             let str = `
             <tr id="tr_${user.id}">
                 <td class="table-column-pl-0 text-center">
-                  <a class="d-flex align-items-start" style="margin-left: 30px;" href="user-profile.html">
+                  <button class="d-flex align-items-start profile-user" style="margin-left: 30px;" data-id="${user.id}">
                     <div class="avatar avatar-soft-primary avatar-circle">
                       <img class="avatar-initials" src="/images/avatar/${user.avatar}">
                     </div>
@@ -356,9 +453,9 @@
                       <span class="d-block h5 text-hover-primary mb-0">${user.fullName}</span>
                       <span class="d-block font-size-sm text-body">${user.email}</span>
                     </div>
-                  </a>
+                  </button>
                 </td>
-                <td>
+                <td class="usernameCol">
                   <span class="d-block h5 mb-0">${user.username}</span>
                 </td>
                 <td>${user.phone}</td>
@@ -397,6 +494,8 @@
         $(".deposit").off();
         $(".blocked").off();
         $(".actived").off();
+        $(".profile-admin").off();
+        $(".profile-user").off();
     }
 
     // handle show Modal
@@ -410,6 +509,7 @@
         handleShowRemove();
 
         handleShowProfileAdmin();
+        handleShowProfileUser();
     }
 
     // Show form add admin
@@ -613,12 +713,19 @@
 
             getUserById(id).then(() => {
 
-                $("#userIdPro").val(user.id);
+                $("#adminIdPro").val(user.id);
+                $("#avatarAdminPro").val(user.avatar);
                 $("#usernameAdminPro").val(user.username);
                 $("#fullNameAdminPro").val(user.fullName);
                 $("#emailAdminPro").val(user.email);
                 $("#phoneAdminPro").val(user.phone);
                 $("#provinceAdminPro").val(user.locationRegion.provinceId);
+
+                let avatar = user.avatar;
+                let str = `<img id="avatarAdminPro" class="rounded-circle mx-auto" width="250" height="250"
+                                             src="/images/avatar/${avatar}" alt="Image Description">`;
+
+                $('.avatar-admin').empty().append(str);
 
                 getAllDistrictsByProvinceId(user.locationRegion.provinceId).then(() => {
 
@@ -635,6 +742,7 @@
             })
         })
     }
+
     // change to edit admin
     $('#changeUsernameA').on('click', () => {
         $('#usernameAdminPro').removeAttr("readonly").focus();
@@ -664,9 +772,10 @@
         changeLocationEdit();
         // selectAddressToUpdate();
     })
+
     // Edit Admin
     function doEditAdmin() {
-        let id = $("#userIdPro").val();
+        let id = $("#adminIdPro").val();
         let avatar = $("#avatarAdminPro").val();
         let username = $('#usernameAdminPro').val();
         let password = "password";
@@ -713,7 +822,6 @@
             avatar,
             locationRegion
         }
-        console.log(user);
 
         $.ajax({
             headers: {
@@ -1061,6 +1169,8 @@
                                 showConfirmButton: false,
                                 timer: 1500
                             })
+                            $("#table-user tbody").empty();
+                            getAllUsers();
                         })
                         .fail((jqXHR) => {
                             $('#mdBlock .modal-body .modal-alert-danger').empty();
@@ -1142,6 +1252,8 @@
                                 showConfirmButton: false,
                                 timer: 2000
                             })
+                            $("#table-user tbody").empty();
+                            getAllUsers();
                         })
                         .fail((jqXHR) => {
                             console.log(jqXHR);
@@ -1223,13 +1335,67 @@
         })
     }
 
+    // profile user
+    function handleShowProfileUser() {
+
+        let btnProfileUser = $(".profile-user");
+
+        btnProfileUser.on('click', function () {
+
+            let id = $(this).data('id');
+
+            getUserById(id).then(() => {
+
+                $("#userIdPro").val(user.id);
+                $("#usernameUserPro").val(user.username);
+                $("#fullNameUserPro").val(user.fullName);
+                $("#emailUserPro").val(user.email);
+                $("#phoneUserPro").val(user.phone);
+                $("#provinceUserPro").val(user.locationRegion.provinceName);
+                $("#districtUserPro").val(user.locationRegion.districtName);
+                $("#wardUserPro").val(user.locationRegion.wardName);
+                $("#addressUserPro").val(user.locationRegion.address);
+
+                let avatar = user.avatar;
+                let str = `<img id="avatarUserPro" class="rounded-circle mx-auto" width="250" height="250"
+                                             src="/images/avatar/${avatar}" alt="Image Description">`;
+
+                let btnFooter = `<button type="button" class="btn btn-secondary btnClose" data-bs-dismiss="modal">Close</button>
+                                   <button type="button" id="btnHistoryCoin" class="btn btn-outline-primary history-coin" data-id="${user.id}">
+                                         <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                         Coin transfer history
+                                   </button>`;
+
+                $('.avatar-user').empty().append(str);
+
+                $('#btnProfileUser').empty().append(btnFooter)
+
+                $("#mdProfileUser").modal('show');
+
+                doShowHistoryCoin ();
+
+            })
+        })
+    }
+
+    function doShowHistoryCoin () {
+        let btnHistory = $('#btnHistoryCoin');
+        btnHistory.on('click', () => {
+            let id = $('#btnHistoryCoin').data('id');
+
+            getHistoryDepositByUserID(id).then(() => {
+                $('#mdHistoryDepositUser').modal('show');
+                $('#mdProfileUser').modal('hide');
+            });
+        })
+    }
 
     // draw user
     function drawUser(user) {
         let str = `
             <tr id="tr_${user.id}">
                 <td class="table-column-pl-0 text-center">
-                  <a class="d-flex align-items-start" style="margin-left: 30px;" href="user-profile.html">
+                  <button class="d-flex align-items-start profile-user" style="margin-left: 30px;" data-id="${user.id}">
                     <div class="avatar avatar-soft-primary avatar-circle">
                       <img class="avatar-initials" src="/images/avatar/${user.avatar}">
                     </div>
@@ -1237,9 +1403,9 @@
                       <span class="d-block h5 text-hover-primary mb-0">${user.fullName}</span>
                       <span class="d-block font-size-sm text-body">${user.email}</span>
                     </div>
-                  </a>
+                  </button>
                 </td>
-                <td>
+                <td class="usernameCol">
                   <span class="d-block h5 mb-0">${user.username}</span>
                 </td>
                 <td>${user.phone}</td>
@@ -1417,8 +1583,7 @@
                         $("#wardAdminPro").append(str);
                     });
                     wards = data;
-                }
-                else {
+                } else {
                     Swal.fire({
                         title: "District invalid!",
                         icon: 'question',
@@ -1494,7 +1659,6 @@
     }
 
 
-
     $("#districtAdminCreate").change(() => {
         let districtId = $("#districtAdminCreate").val();
 
@@ -1503,6 +1667,16 @@
 
 
     // END API province
+
+    //search filter JQuery
+    $(document).ready(function(){
+        $("#searchTable").on("keyup", function() {
+            let value = $(this).val().toLowerCase();
+            $("#table-user tbody tr").filter(function() {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
 </script>
 </body>
 

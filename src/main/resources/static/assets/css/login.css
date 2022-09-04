@@ -401,12 +401,21 @@ html {
     outline: none;
 }
 
-.modal-alert-danger {
+#register .modal-alert-danger {
     background-color: #ffa4a4;
     border-radius: 10px;
     position: fixed;
     top: 64px;
     left: 464px;
+    z-index: 999;
+}
+
+#login .modal-alert-danger {
+    background-color: #ffa4a4;
+    border-radius: 10px;
+    position: fixed;
+    top: 64px;
+    left: 537px;
     z-index: 999;
 }
 
@@ -432,4 +441,7 @@ label.error {
 .registerErr {
     display: flex;
     justify-content: space-around;
+}
+body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown) {
+    width: 100vw;
 }

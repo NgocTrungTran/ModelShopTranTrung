@@ -16,6 +16,10 @@ public interface UserService extends IGeneralService<User>, UserDetailsService {
 
     List<UserDTO> findAllUsersDTODeleted();
 
+    List<UserDTO> findAllUsersDTODeletedFalseAndActiveTrue();
+
+    List<UserDTO> findAllUsersDTODeletedFalseAndActiveFalse();
+
     Boolean existsByUsername(String username);
 
     Boolean existsByEmail(String email);

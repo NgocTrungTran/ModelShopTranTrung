@@ -6,6 +6,7 @@ import com.tnt.modelshoptrantrung.model.LocationRegion;
 import com.tnt.modelshoptrantrung.model.Role;
 import com.tnt.modelshoptrantrung.model.User;
 import com.tnt.modelshoptrantrung.model.dto.DepositDTO;
+import com.tnt.modelshoptrantrung.model.dto.HistoryDepositDTO;
 import com.tnt.modelshoptrantrung.model.dto.UserDTO;
 import com.tnt.modelshoptrantrung.service.account.user.UserService;
 import com.tnt.modelshoptrantrung.service.deposit.DepositService;
@@ -49,7 +50,31 @@ public class UserRestController {
         List<UserDTO> users = userService.findAllUsersDTO ();
 
         if (users.isEmpty ()) {
-            return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+            throw new DataOutputException ( "No data" );
+        }
+
+        return new ResponseEntity<>(users, HttpStatus.OK);
+    }
+
+    @GetMapping("/active-list")
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    public ResponseEntity<?> getAllUserActive() {
+        List<UserDTO> users = userService.findAllUsersDTODeletedFalseAndActiveTrue ();
+
+        if (users.isEmpty ()) {
+            throw new DataOutputException ( "No data" );
+        }
+
+        return new ResponseEntity<>(users, HttpStatus.OK);
+    }
+
+    @GetMapping("/block-list")
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    public ResponseEntity<?> getAllUserBlock() {
+        List<UserDTO> users = userService.findAllUsersDTODeletedFalseAndActiveFalse ();
+
+        if (users.isEmpty ()) {
+            throw new DataOutputException ( "No data" );
         }
 
         return new ResponseEntity<>(users, HttpStatus.OK);
@@ -175,6 +200,7 @@ public class UserRestController {
 
         try {
             userDTO.setPassword ( userOptional.get ().getPassword () );
+            userDTO.setAvatar ( userOptional.get ().getAvatar () );
 
             LocationRegion locationRegionBefore = userOptional.get ().getLocationRegion ();
             LocationRegion locationRegionAfter = userDTO.getLocationRegion ().toLocationRegion ();
@@ -237,6 +263,24 @@ public class UserRestController {
         catch (DataIntegrityViolationException e) {
             throw new DataInputException ("Invalid deposit information");
         }
+    }
+
+    @GetMapping("/deposit/{userId}")
+    public ResponseEntity<?> getDepositByUserId (@PathVariable String userId) {
+        if ( !validator.isIntValid ( userId ) ){
+            throw new DataInputException ( "User not exists!" );
+        }
+
+        Long user_id = Long.parseLong ( userId );
+
+        List<HistoryDepositDTO> historyDepositDTOList = depositService.getHistoryDepositByUserID ( user_id );
+
+        if ( historyDepositDTOList.isEmpty () ) {
+            throw new ResourceNotFoundException ( "No data" );
+        }
+
+
+        return new ResponseEntity<> (historyDepositDTOList ,HttpStatus.OK );
     }
 
     @PatchMapping("/blocked")

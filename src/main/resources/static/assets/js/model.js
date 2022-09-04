@@ -36,11 +36,15 @@ class Deposit {
 }
 
 class Product {
-    constructor(id, title, price, image, category) {
+    constructor(id, title, slug, image, price, sold, viewed, createBy, category ) {
         this.id = id;
         this.title = title;
-        this.price = price;
+        this.slug = slug;
         this.image = image;
+        this.price = price;
+        this.sold = sold;
+        this.viewed = viewed;
+        this.createBy = createBy;
         this.category = category;
     }
 }
@@ -49,5 +53,15 @@ class Category {
     constructor(id, title) {
         this.id = id;
         this.title = title;
+    }
+}
+
+class HistoryDeposit {
+    constructor(id, createdBy, fullName, transactionAmount, createdAt) {
+        this.id = id;
+        this.createdBy = createdBy;
+        this.fullName = fullName;
+        this.transactionAmunt = transactionAmount;
+        this.createdAt = createdAt;
     }
 }

@@ -1,5 +1,6 @@
 package com.tnt.modelshoptrantrung.model.dto;
 
+import com.tnt.modelshoptrantrung.model.Category;
 import com.tnt.modelshoptrantrung.model.Product;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -25,16 +26,35 @@ public class ProductDTO {
 
     private BigDecimal price;
 
+    private Long sold;
+
+    private Long viewed;
+    private String createdBy;
+
     private CategoryDTO category;
 
+    public ProductDTO(Long id, String title, String slug, String image, BigDecimal price, Long sold, Long viewed, String createdBy, Category category) {
+        this.id = id;
+        this.title = title;
+        this.slug = slug;
+        this.image = image;
+        this.price = price;
+        this.sold = sold;
+        this.viewed = viewed;
+        this.createdBy = createdBy;
+        this.category = category.toCategoryDTO ();
+    }
+
     public Product toProduct() {
-        return new Product ()
+        return (Product) new Product ()
                 .setId ( id )
                 .setTitle ( title )
                 .setSlug ( slug )
                 .setPrice ( price )
                 .setImage ( image )
-                .setCategory ( category.toCategory () );
+                .setCategory ( category.toCategory () )
+                .setCreatedBy ( createdBy )
+                ;
 
     }
 }

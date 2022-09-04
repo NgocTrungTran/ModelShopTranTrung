@@ -5,6 +5,7 @@
 <head>
     <title>Model Shop</title>
     <th:block th:replace="/layout/head :: head"/>
+    <link rel="stylesheet" href="/assets/css/productA.css">
 </head>
 
 <body class="footer-offset">
@@ -74,7 +75,7 @@
 
             <!-- Table -->
             <div class="table-responsive datatable-custom">
-                <table id="table-user"
+                <table id="table-product"
                        class="table table-lg table-borderless table-thead-bordered table-nowrap table-align-middle card-table">
                     <thead class="thead-light">
                     <tr>
@@ -122,9 +123,92 @@
         }
     }
 
+    function init() {
+        getAllProducts();
+    }
+    init();
+
     let product = new Product();
 
-    handleShowModalCreateProduct();
+    //get all product
+    function getAllProducts() {
+        $.ajax({
+            headers: {
+                "accept": "application/json",
+                "content-type": "application/json"
+            },
+            type: "GET",
+            url: page.urls.getAllProducts
+        })
+            .done((data) => {
+                showListProduct(data);
+
+            })
+            .fail((jqXHR) => {
+                $('#table-product tbody').empty();
+
+                console.log(jqXHR.responseJSON);
+                if (jqXHR.responseJSON.message) {
+                    let message = jqXHR.responseJSON.message;
+
+                    let str = `<td colspan="6" id="message-error" class="error text-center" >${message}</td>`;
+
+                    $("#table-product tbody").append(str);
+                }
+            })
+    }
+
+    // Show all Product
+    function showListProduct(data) {
+        $.each(data, (i, item) => {
+            product = item;
+            let str = `
+            <tr id="tr_${product.id}">
+                <td>
+                  <span class="d-block h5 mb-0">${product.title}</span>
+                </td>
+                <td>${product.category.title}</td>
+                <td class="text-end">
+                  ${formatCash(product.price)}
+                </td>
+                <td class="text-center">
+                    ${product.sold}
+                </td>
+                <td class="text-center">
+                    <img src="/images/product/${product.image}" alt="image">
+                </td>
+                <td class="text-center">
+                    <button class="btn btn-sm btn-outline-success update" data-id="${product.id}" data-bs-toggle="tooltip"
+                                    data-bs-placement="top" data-bs-title="Update">
+                        <i class="fa fa-pencil-square-o" aria-hidden="true"></i> Update
+                    </button>
+
+                    <button class="btn btn-sm btn-outline-danger remove" data-id="${product.id}" data-bs-toggle="tooltip"
+                                    data-bs-placement="top" data-bs-title="Remove">
+                        <i class="fa fa-trash-o" aria-hidden="true"></i> Remove
+                    </button>
+                </td>
+            </tr>
+        `;
+
+            $("#table-product tbody").prepend(str);
+
+            handleShowModal();
+        });
+    }
+
+    function handleShowModal() {
+        removeEventShowModal();
+        handleShowModalCreateProduct();
+    }
+
+    //Remove even show
+    function removeEventShowModal() {
+        $(".update").off();
+        $(".remove").off();
+    }
+
+
     // Show form create product
     function handleShowModalCreateProduct() {
         let btnCreate = $(".btnCreate");
@@ -135,21 +219,18 @@
     }
 
     // Create product
-    function doCreateProdct() {
+    function doCreateProduct() {
 
         let title = $("#titleCreate").val();
+        let slug = title;
         let image = $('#imageCreate').val();
         let price = +$('#priceCreate').val();
+        let createByAdmin = $("#usernameAdmin").val();
         let categoryTitle = $('#categoryCreate').val();
-
         let category = new Category(0, categoryTitle);
+        console.log("ok" + createByAdmin);
 
-        product = {
-            title,
-            image,
-            price,
-            category
-        }
+        product = new Product(0, title, slug, image, price, createByAdmin, category )
         console.log(product);
 
         $.ajax({
@@ -211,8 +292,16 @@
     let btnCreateProduct = $("#btnCreate");
     btnCreateProduct.on('click', () => {
         // $("#frmCreate").submit();
-        doCreateProdct();
+        doCreateProduct();
     });
+
+    // format money
+    function formatCash(coin) {
+        let str = coin.toString();
+        return str.split('').reverse().reduce((prev, next, index) => {
+            return ((index % 3) ? next : (next + ',')) + prev;
+        });
+    }
 </script>
 </body>
 

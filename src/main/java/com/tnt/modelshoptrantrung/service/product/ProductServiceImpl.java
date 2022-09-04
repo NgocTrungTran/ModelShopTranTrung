@@ -2,6 +2,7 @@ package com.tnt.modelshoptrantrung.service.product;
 
 
 import com.tnt.modelshoptrantrung.model.Product;
+import com.tnt.modelshoptrantrung.model.dto.ProductDTO;
 import com.tnt.modelshoptrantrung.model.dto.ProductListDTO;
 import com.tnt.modelshoptrantrung.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,11 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<ProductListDTO> findAllProductListDTO() {
         return productRepository.findAllProductListDTO();
+    }
+
+    @Override
+    public List<ProductDTO> findAllProductsDTO() {
+        return productRepository.findAllProductsDTO ();
     }
 
     @Override

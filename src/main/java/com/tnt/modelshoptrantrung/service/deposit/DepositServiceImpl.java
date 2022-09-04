@@ -1,6 +1,7 @@
 package com.tnt.modelshoptrantrung.service.deposit;
 
 
+import com.tnt.modelshoptrantrung.model.dto.HistoryDepositDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -9,6 +10,7 @@ import com.tnt.modelshoptrantrung.model.User;
 import com.tnt.modelshoptrantrung.repository.DepositRepository;
 import com.tnt.modelshoptrantrung.service.account.user.UserService;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -53,5 +55,10 @@ public class DepositServiceImpl implements DepositService{
         userService.addCoin ( user.getId (), deposit.getTransactionAmount () );
 
         return userService.getByUsername ( user.getUsername () ).get ();
+    }
+
+    @Override
+    public List<HistoryDepositDTO> getHistoryDepositByUserID(Long userid) {
+        return depositRepository.getHistoryDepositByUserID ( userid );
     }
 }

@@ -23,21 +23,19 @@ public class UserDTO {
     private Long id;
 
     @NotBlank(message = "username not blank")
-    @Size(min = 8, max = 20)
+    @Size(min = 8, max = 20, message = "Username size between 8 and 20")
     private String username;
 
-    @NotBlank(message = "Full name not blank")
-    @Size(min = 5, max = 30)
+    @Size(min = 5, max = 30, message = "Full name size between 5 and 30")
     private String fullName;
 
-    @NotBlank(message = "Email not blank")
-    @Size(min = 5, max = 30)
+    @Size(min = 5, max = 30,  message = "Email size between 5 and 30")
     private String email;
 
+    @Size(min = 9, max = 10,  message = "Phone size between 9 and 10")
     private String phone;
 
-    @NotBlank(message = "password not blank")
-    @Size(min = 8, max = 20)
+    @Size(min = 8, max = 20,  message = "Password size between 8 and 20")
     private String password;
     private BigDecimal coin;
 
@@ -82,6 +80,7 @@ public class UserDTO {
                 .setPhone ( phone )
                 .setFullName ( fullName )
                 .setEmail ( email )
+                .setAvatar ( avatar )
                 .setLocationRegion ( locationRegion.toLocationRegion () );
     }
 }

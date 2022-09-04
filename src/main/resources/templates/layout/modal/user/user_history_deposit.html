@@ -1,0 +1,38 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<th:block th:fragment="user_history_deposit">
+    <!-- History User Modal -->
+    <div class="modal fade" id="mdHistoryDepositUser" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
+         aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: #377dff; padding: 12px;">
+                    <h3 style="color: white" class="modal-title">User History Coin</h3>
+                    <button type="button" class="btn-close btnClose" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <table class="tbHistoryCoin table table-lg table-borderless table-thead-bordered table-nowrap table-align-middle">
+                        <thead class="thead-light">
+                        <tr>
+                            <th>#</th>
+                            <th>Sender</th>
+                            <th>Recipient</th>
+                            <th>Transaction Amount (VND)</th>
+                            <th>Created at</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer" id="btnProfileUser">
+                    <button type="button" class="btn btn-secondary btnClose" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- profile user Modal -->
+</th:block>
+
+

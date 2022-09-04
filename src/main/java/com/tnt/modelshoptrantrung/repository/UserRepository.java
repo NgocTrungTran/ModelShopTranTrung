@@ -44,6 +44,52 @@ public interface UserRepository extends JpaRepository<User, Long> {
             "FROM User AS u WHERE u.deleted = true and u.role.id = 2"
     )
     List<UserDTO> findAllUsersDTODeleted();
+
+    @Query("SELECT new com.tnt.modelshoptrantrung.model.dto.UserDTO (" +
+            "u.id, " +
+            "u.username, " +
+            "u.fullName, " +
+            "u.email, " +
+            "u.phone, " +
+            "u.coin, " +
+            "u.avatar, " +
+            "u.blocked, " +
+            "u.locationRegion" +
+            ") " +
+            "FROM User AS u WHERE u.deleted = false and u.role.id = 2 and u.blocked = false "
+    )
+    List<UserDTO> findAllUsersDTODeletedFalseAndActiveTrue();
+
+    @Query("SELECT new com.tnt.modelshoptrantrung.model.dto.UserDTO (" +
+            "u.id, " +
+            "u.username, " +
+            "u.fullName, " +
+            "u.email, " +
+            "u.phone, " +
+            "u.coin, " +
+            "u.avatar, " +
+            "u.blocked, " +
+            "u.locationRegion" +
+            ") " +
+            "FROM User AS u WHERE u.deleted = false and u.role.id = 2 and u.blocked = true "
+    )
+    List<UserDTO> findAllUsersDTODeletedFalseAndActiveFalse();
+
+//    @Query("SELECT new com.tnt.modelshoptrantrung.model.dto.UserDTO (" +
+//            "u.id, " +
+//            "u.username, " +
+//            "u.fullName, " +
+//            "u.email, " +
+//            "u.phone, " +
+//            "u.coin, " +
+//            "u.avatar, " +
+//            "u.blocked, " +
+//            "u.locationRegion" +
+//            ") " +
+//            "FROM User AS u WHERE u.deleted = false and u.role.id = 2 and u.blocked = true "
+//    )
+//    List<UserDTO> findAllUsersByUsername();
+
     Optional<User> findByUsername(String username);
 
     Boolean existsByUsername(String username);

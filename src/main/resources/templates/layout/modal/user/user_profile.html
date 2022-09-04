@@ -1,0 +1,124 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<th:block th:fragment="user_profile">
+    <!-- profile User Modal -->
+    <div class="modal fade" id="mdProfileUser" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
+         aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: #377dff; padding: 12px;">
+                    <h3 style="color: white" class="modal-title">User profile</h3>
+                    <button type="button" class="btn-close btnClose" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="modal-alert-danger hide col-3" id="editErr"></div>
+                    <form id="frmProfileUser" action="" method="post">
+                        <div class="card-body">
+
+                            <div class="row form-group">
+                                <div class="col-sm-12">
+                                    <div class="text-center avatar-user">
+
+                                    </div>
+                                </div>
+                            </div>
+                            <input type="hidden" id="userIdPro">
+                            <div class="col-sm-6" style="float: left">
+                                <div class="row form-group">
+                                    <label for="usernameUserPro"
+                                           class="col-sm-5 col-form-label input-label fw-bold">Username</label>
+
+                                    <div class="col-sm-12">
+                                        <input type="text" class="form-control" name="usernameUserPro"
+                                               id="usernameUserPro"
+                                               aria-label="usernameUserPro" readonly>
+                                    </div>
+                                </div>
+
+                                <div class="row form-group">
+                                    <label for="fullNameUserPro" class="col-sm-5 col-form-label input-label fw-bold">Full
+                                        name </label>
+
+                                    <div class="col-sm-12">
+                                        <input type="text" class="form-control" name="fullNameUserPro"
+                                               id="fullNameUserPro"
+                                               aria-label="fullNameUserPro" readonly>
+                                    </div>
+                                </div>
+
+                                <div class="row form-group">
+                                    <label for="emailUserPro" class="col-sm-5 col-form-label input-label fw-bold">Email</label>
+
+                                    <div class="col-sm-12">
+                                        <input type="text" class="form-control" name="emailUserPro" id="emailUserPro"
+                                               readonly>
+                                    </div>
+                                </div>
+
+                                <div class="row form-group">
+                                    <label for="phoneUserPro" class="col-sm-5 col-form-label input-label fw-bold">Phone</label>
+
+                                    <div class="col-sm-12">
+                                        <input type="text" class="form-control" name="phoneUserPro" id="phoneUserPro"
+                                               readonly>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6" style="float: left">
+                                <div class="row form-group">
+                                    <label for="provinceUserPro"
+                                           class="col-sm-5 col-form-label input-label fw-bold">Province</label>
+                                    <div class="col-sm-12 province-edit">
+                                        <input name="provinceUserPro" id="provinceUserPro" readonly>
+                                    </div>
+                                </div>
+
+                                <div class="row form-group">
+                                    <label for="districtUserPro"
+                                           class="col-sm-5 col-form-label input-label fw-bold">District</label>
+                                    <input type="hidden" id="districtIdPro">
+
+                                    <div class="col-sm-12 district-edit">
+                                        <input name="districtUserPro" id="districtUserPro" readonly>
+                                    </div>
+                                </div>
+
+                                <div class="row form-group">
+                                    <label for="wardUserPro" class="col-sm-5 col-form-label input-label fw-bold">Ward</label>
+                                    <input type="hidden" id="wardIdPro">
+
+                                    <div class="col-sm-12 ward-edit">
+                                        <input name="wardUserPro" id="wardUserPro" readonly="">
+                                    </div>
+                                </div>
+
+                                <div class="row form-group">
+                                    <label for="addressUserPro"
+                                           class="col-sm-5 col-form-label input-label fw-bold">Address</label>
+
+                                    <div class="col-sm-12">
+                                        <input type="text" class="form-control" name="addressUserPro"
+                                               id="addressUserPro" readonly>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer" id="btnProfileUser">
+<!--                    <button type="button" class="btn btn-secondary btnClose" data-bs-dismiss="modal">Close</button>-->
+<!--                    <button type="button" id="btnHistoryCoin" class="btn btn-outline-success history-coin">-->
+<!--                        <i class="fa fa-pencil-square-o" aria-hidden="true"></i>-->
+<!--                        Coin transfer history-->
+<!--                    </button>-->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- profile user Modal -->
+</th:block>
+
+

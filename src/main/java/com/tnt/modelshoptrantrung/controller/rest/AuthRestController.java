@@ -1,5 +1,6 @@
 package com.tnt.modelshoptrantrung.controller.rest;
 
+import com.tnt.modelshoptrantrung.exception.ResourceNotFoundException;
 import com.tnt.modelshoptrantrung.service.jwt.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -76,38 +77,39 @@ public class AuthRestController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody User user) {
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken (user.getUsername(), user.getPassword()));
+            SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken (user.getUsername(), user.getPassword()));
+            String jwt = jwtService.generateTokenLogin(authentication);
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            User currentUser = userService.getByUsername(user.getUsername()).get ();
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+            JwtResponse jwtResponse = new JwtResponse(
+                    jwt,
+                    currentUser.getId(),
+                    userDetails.getUsername(),
+                    currentUser.getUsername(),
+                    userDetails.getAuthorities()
+            );
 
-        String jwt = jwtService.generateTokenLogin(authentication);
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        User currentUser = userService.getByUsername(user.getUsername()).get ();
+            ResponseCookie springCookie = ResponseCookie.from("JWT", jwt)
+                    .httpOnly(false)
+                    .secure(false)
+                    .path("/")
+                    .maxAge(60 * 1000)
+                    .domain("localhost")
+                    .build();
 
-        JwtResponse jwtResponse = new JwtResponse(
-                jwt,
-                currentUser.getId(),
-                userDetails.getUsername(),
-                currentUser.getUsername(),
-                userDetails.getAuthorities()
-        );
+            System.out.println(jwtResponse);
 
-        ResponseCookie springCookie = ResponseCookie.from("JWT", jwt)
-                .httpOnly(false)
-                .secure(false)
-                .path("/")
-                .maxAge(60 * 1000)
-                .domain("localhost")
-                .build();
-
-        System.out.println(jwtResponse);
-
-        return ResponseEntity
-                .ok()
-                .header( HttpHeaders.SET_COOKIE, springCookie.toString())
-                .body(jwtResponse);
-
+            return ResponseEntity
+                    .ok()
+                    .header( HttpHeaders.SET_COOKIE, springCookie.toString())
+                    .body(jwtResponse);
+        } catch (Exception e) {
+            throw new ResourceNotFoundException ( "Login information is incorrect" );
+        }
     }
 }
