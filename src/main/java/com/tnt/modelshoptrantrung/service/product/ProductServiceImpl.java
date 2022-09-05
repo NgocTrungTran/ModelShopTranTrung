@@ -36,6 +36,16 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public List<ProductDTO> findAllProductsDTOTrash() {
+        return productRepository.findAllProductsDTOTrash ();
+    }
+
+    @Override
+    public Boolean existsByTitle(String title) {
+        return productRepository.existsByTitle ( title );
+    }
+
+    @Override
     public Optional<Product> findById(Long id) {
         return productRepository.findById(id);
     }

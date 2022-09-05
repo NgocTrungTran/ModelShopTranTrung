@@ -27,7 +27,7 @@ public class AdminController {
         Optional<User> userOptional = userService.findByUsername ( username );
 
         if ( !userOptional.isPresent () ) {
-            throw new AttributesExistsException ( "Username not exist!" );
+            throw new AttributesExistsException ( "Admin not exist!" );
         }
         User user = userOptional.get ();
         modelAndView.addObject ( "admin", user.toUserDTO () );
@@ -43,7 +43,7 @@ public class AdminController {
         Optional<User> userOptional = userService.findByUsername ( username );
 
         if ( !userOptional.isPresent () ) {
-            throw new AttributesExistsException ( "Username not exist!" );
+            throw new AttributesExistsException ( "Admin not exist!" );
         }
         User user = userOptional.get ();
         modelAndView.addObject ( "admin", user.toUserDTO () );
@@ -57,7 +57,21 @@ public class AdminController {
         Optional<User> userOptional = userService.findByUsername ( username );
 
         if ( !userOptional.isPresent () ) {
-            throw new AttributesExistsException ( "Username not exist!" );
+            throw new AttributesExistsException ( "Admin not exist!" );
+        }
+        User user = userOptional.get ();
+        modelAndView.addObject ( "admin", user.toUserDTO () );
+        return modelAndView;
+    }
+
+    @GetMapping("/product/recycle-bin")
+    public ModelAndView showProductDeleteTrue(@PathVariable("username") String username){
+        ModelAndView modelAndView = new ModelAndView( "/admin/product/product_trash" );
+
+        Optional<User> userOptional = userService.findByUsername ( username );
+
+        if ( !userOptional.isPresent () ) {
+            throw new AttributesExistsException ( "Admin not exist!" );
         }
         User user = userOptional.get ();
         modelAndView.addObject ( "admin", user.toUserDTO () );

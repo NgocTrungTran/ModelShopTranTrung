@@ -61,9 +61,9 @@
                                         <i class="tio-search"></i>
                                     </div>
                                 </div>
-                                <input id="datatableSearch" type="search" class="form-control"
-                                       placeholder="Search users"
-                                       aria-label="Search users">
+                                <input id="searchTable" type="search" class="form-control"
+                                       placeholder="Search products"
+                                       aria-label="Search products">
                             </div>
                             <!-- End Search -->
                         </form>
@@ -76,7 +76,7 @@
             <!-- Table -->
             <div class="table-responsive datatable-custom">
                 <table id="table-product"
-                       class="table table-lg table-borderless table-thead-bordered table-nowrap table-align-middle card-table">
+                       class="table table-lg table-borderless table-hover table-thead-bordered table-nowrap table-align-middle card-table">
                     <thead class="thead-light">
                     <tr>
                         <th class="table-column-pl-0 text-center">Title</th>
@@ -107,8 +107,11 @@
 
     <!--    Modal start -->
 
-
     <th:block th:replace="/layout/modal/product/product_create :: product_create"/>
+
+    <th:block th:replace="/layout/modal/product/product_edit :: product_edit"/>
+
+    <th:block th:replace="/layout/modal/user/admin_profile :: admin_profile"/>
 
 
 </main>
@@ -123,8 +126,11 @@
         }
     }
 
+    let user = new User();
+
     function init() {
         getAllProducts();
+        // selectAddressToUpdate();
     }
     init();
 
@@ -156,6 +162,72 @@
                     $("#table-product tbody").append(str);
                 }
             })
+    }
+
+    function getProductById(id) {
+
+        return $.ajax({
+            headers: {
+                "Accept": "application/json",
+                "Content-type": "application/json"
+            },
+            type: "GET",
+            url: 'http://localhost:8080/api/products/' + id
+        })
+            .done((data) => {
+                product = data;
+            })
+            .fail((jqXHR) => {
+                console.log(jqXHR);
+                $('#mainErr').empty();
+
+                $("#mainErr").addClass('show').removeClass('hide');
+
+                if (jqXHR.responseJSON.message) {
+                    let message = jqXHR.responseJSON.message;
+                    console.log(message);
+
+                    Swal.fire({
+                        title: message,
+                        icon: 'warning',
+                        showConfirmButton: false,
+                        timer: 2000
+                    })
+                }
+            });
+    }
+
+    function getUserById(id) {
+
+        return $.ajax({
+            headers: {
+                "Accept": "application/json",
+                "Content-type": "application/json"
+            },
+            type: "GET",
+            url: 'http://localhost:8080/api/users/' + id
+        })
+            .done((data) => {
+                user = data;
+            })
+            .fail((jqXHR) => {
+                console.log(jqXHR);
+                $('#mainErr').empty();
+
+                $("#mainErr").addClass('show').removeClass('hide');
+
+                if (jqXHR.responseJSON.message) {
+                    let message = jqXHR.responseJSON.message;
+                    console.log(message);
+
+                    Swal.fire({
+                        title: message,
+                        icon: 'warning',
+                        showConfirmButton: false,
+                        timer: 2000
+                    })
+                }
+            });
     }
 
     // Show all Product
@@ -200,12 +272,17 @@
     function handleShowModal() {
         removeEventShowModal();
         handleShowModalCreateProduct();
+        handleShowRemove();
+        handleShowEditModal();
+
+        handleShowProfileAdmin();
     }
 
     //Remove even show
     function removeEventShowModal() {
         $(".update").off();
         $(".remove").off();
+        $(".profile-admin").off();
     }
 
 
@@ -231,7 +308,6 @@
         console.log("ok" + createByAdmin);
 
         product = new Product(0, title, slug, image, price, createByAdmin, category )
-        console.log(product);
 
         $.ajax({
             headers: {
@@ -295,6 +371,170 @@
         doCreateProduct();
     });
 
+    // remove user
+    function handleShowRemove() {
+
+        let btnRemove = $(".remove");
+
+        btnRemove.on('click', function () {
+            let id = $(this).data('id');
+
+            doRemove(id);
+        })
+    }
+
+    function doRemove(productId) {
+        getProductById(productId).then(() => {
+            Swal.fire({
+                title: `Are you sure remove '${product.title}'?`,
+                text: "The data will be moved to the recycle bin!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#198754',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, remove!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        headers: {
+                            "Accept": "application/json",
+                            "Content-type": "application/json"
+                        },
+                        type: "PATCH",
+                        url: 'http://localhost:8080/api/products/remove',
+                        data: JSON.stringify(product)
+                    })
+                        .done((data) => {
+                            $('#table-product tbody').empty();
+
+                            Swal.fire({
+                                position: 'top-end',
+                                icon: 'success',
+                                title: `Product '${product.title}' has been remove`,
+                                showConfirmButton: false,
+                                timer: 2000
+                            })
+                            getAllProducts();
+                        })
+                        .fail((jqXHR) => {
+                            console.log(jqXHR);
+                        });
+                }
+            })
+                .catch(() => {
+                    Swal.fire({
+                        title: "Product invalid",
+                        icon: 'error',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                });
+        })
+    }
+
+    // show edit modal
+    function handleShowEditModal() {
+
+        let btnEdit = $(".update");
+
+        btnEdit.on('click', function () {
+
+            let id = $(this).data('id');
+
+            getProductById(id).then(() => {
+
+                $("#productIdEdit").val(product.id);
+                $("#titleEdit").val(product.title);
+                $("#imageEdit").val(product.image);
+                $("#priceEdit").val(product.price);
+                $("#categoryEdit").val(product.category.title);
+
+                $("#mdEdit").modal('show');
+            })
+        })
+    }
+
+    // do edit
+    function doEditProduct() {
+        let id = $("#productIdEdit").val();
+
+        let title = $("#titleEdit").val();
+        let slug = title;
+        let image = $('#imageEdit').val();
+        let price = $('#priceEdit').val();
+        let sold = 0;
+        let view = 0;
+        let createBy = "";
+        let categoryTitle = $('#categoryEdit').val();
+
+        let category = new Category(0, categoryTitle);
+
+        let product =  new Product(id, title, slug, image, price, sold, view, createBy, category );
+
+        $.ajax({
+            headers: {
+                "accept": "application/json",
+                "content-type": "application/json"
+            },
+            type: "PUT",
+            url: "http://localhost:8080/api/products/edit",
+            data: JSON.stringify(product)
+        })
+            .done((data) => {
+
+                $("#mdEdit .modal-body .modal-alert-danger").addClass('hide').removeClass('show');
+
+                drawProduct(data);
+
+                $("#mdEdit").modal('hide');
+
+                Swal.fire({
+                    // position: 'top-end',
+                    icon: 'success',
+                    title: 'Edit product Successfully',
+                    showConfirmButton: false,
+                    timer: 2000
+                })
+
+
+            })
+            .fail((jqXHR) => {
+                console.log(jqXHR);
+
+                $('#mdEdit .modal-body .modal-alert-danger').fadeIn(1000).empty().addClass('show').removeClass('hide').fadeOut(6000);
+
+                if (jqXHR.responseJSON.message) {
+                    let message = jqXHR.responseJSON.message;
+
+                    let str = `<div id="message-error" class="displayErr">
+                                  <label class="error" for="message">${message}</label>
+                                  <i class="fa fa-times closeMess" aria-hidden="true"></i>
+                               </div>`;
+
+                    $("#mdEdit .modal-body .modal-alert-danger").prepend(str);
+                    closeMessage();
+
+                } else if (jqXHR.responseJSON) {
+                    $.each(jqXHR.responseJSON, (key, item) => {
+                        let str = `<div id="${key}-error" class="displayErr">
+                                            <label class="error" for="${key}De">${item}</label>
+                                            <i class="fa fa-times closeErr" aria-hidden="true"></i>
+                                        </div>`;
+                        $("#" + key).addClass("error");
+
+                        $("#mdEdit .modal-body .modal-alert-danger").prepend(str);
+                        closeError(key);
+
+                    })
+                }
+            });
+    }
+    let btnEditProduct = $("#btnEditProduct");
+    btnEditProduct.on('click', () => {
+        doEditProduct();
+        // $("#frmProfileAdmin").submit();
+    });
+
     // format money
     function formatCash(coin) {
         let str = coin.toString();
@@ -302,6 +542,507 @@
             return ((index % 3) ? next : (next + ',')) + prev;
         });
     }
+
+    //search filter JQuery
+    $(document).ready(function(){
+        $("#searchTable").on("keyup", function() {
+            let value = $(this).val().toLowerCase();
+            $("#table-product tbody tr").filter(function() {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+
+    //draw product
+    function drawProduct(product) {
+        let str = `
+            <tr id="tr_${product.id}">
+                <td>
+                  <span class="d-block h5 mb-0">${product.title}</span>
+                </td>
+                <td>${product.category.title}</td>
+                <td class="text-end">
+                  ${formatCash(product.price)}
+                </td>
+                <td class="text-center">
+                    ${product.sold}
+                </td>
+                <td class="text-center">
+                    <img src="/images/product/${product.image}" alt="image">
+                </td>
+                <td class="text-center">
+                    <button class="btn btn-sm btn-outline-success update" data-id="${product.id}" data-bs-toggle="tooltip"
+                                    data-bs-placement="top" data-bs-title="Update">
+                        <i class="fa fa-pencil-square-o" aria-hidden="true"></i> Update
+                    </button>
+
+                    <button class="btn btn-sm btn-outline-danger remove" data-id="${product.id}" data-bs-toggle="tooltip"
+                                    data-bs-placement="top" data-bs-title="Remove">
+                        <i class="fa fa-trash-o" aria-hidden="true"></i> Remove
+                    </button>
+                </td>
+            </tr>
+      `;
+        let trUser = $(`#tr_${product.id}`);
+        trUser.replaceWith(str);
+
+        handleShowModal();
+
+    }
+
+    // Show profile Admin
+    function handleShowProfileAdmin() {
+        let btnProfileAdmin = $(".profile-admin");
+
+        btnProfileAdmin.on('click', function () {
+
+            let id = $('.profile-admin').data('id');
+
+            getUserById(id).then(() => {
+
+                $("#adminIdPro").val(user.id);
+                $("#avatarAdminPro").val(user.avatar);
+                $("#usernameAdminPro").val(user.username);
+                $("#fullNameAdminPro").val(user.fullName);
+                $("#emailAdminPro").val(user.email);
+                $("#phoneAdminPro").val(user.phone);
+                $("#provinceAdminPro").val(user.locationRegion.provinceId);
+
+                console.log(user.locationRegion.provinceId);
+
+                let avatar = user.avatar;
+                let str = `<img id="avatarAdminPro" class="rounded-circle mx-auto" width="250" height="250"
+                                             src="/images/avatar/${avatar}" alt="Image Description">`;
+
+                $('.avatar-admin').empty().append(str);
+
+                getAllDistrictsByProvinceId(user.locationRegion.provinceId).then(() => {
+
+                    $("#districtAdminPro").val(user.locationRegion.districtId);
+
+                    console.log(user.locationRegion.districtId);
+
+
+                    getAllWardsByDistrictId(user.locationRegion.districtId).then(() => {
+
+                        $("#wardAdminPro").val(user.locationRegion.wardId);
+                        $("#addressAdminPro").val(user.locationRegion.address);
+
+                        console.log(user.locationRegion.wardId);
+
+
+                        $("#mdProfileAdmin").modal('show');
+                    })
+                })
+            })
+        })
+    }
+
+    // change to edit admin
+    $('#changeUsernameA').on('click', () => {
+        $('#usernameAdminPro').removeAttr("readonly").focus();
+        $('.edit').removeClass('hide').addClass('show');
+    })
+    $('#changeFullNameA').on('click', () => {
+        $('#fullNameAdminPro').removeAttr("readonly").focus();
+        $('.edit').removeClass('hide').addClass('show');
+    })
+    $('#changeEmailA').on('click', () => {
+        $('#emailAdminPro').removeAttr("readonly").focus();
+        $('.edit').removeClass('hide').addClass('show');
+    })
+    $('#changePhoneA').on('click', () => {
+        $('#phoneAdminPro').removeAttr("readonly").focus();
+        $('.edit').removeClass('hide').addClass('show');
+    })
+
+    $('#changeLocationA').on('click', () => {
+        $('#provinceAdminPro').removeAttr("disabled");
+        $('#districtAdminPro').removeAttr("disabled");
+        $('#wardAdminPro').removeAttr("disabled");
+        $('#addressAdminPro').removeAttr("readonly");
+
+        $('.edit').removeClass('hide').addClass('show');
+
+        changeLocationEdit();
+        // selectAddressToUpdate();
+    })
+
+    // Edit Admin
+    function doEditAdmin() {
+        let id = $("#adminIdPro").val();
+        let avatar = $("#avatarAdminPro").val();
+        let username = $('#usernameAdminPro').val();
+        let password = "password";
+        let fullName = $('#fullNameAdminPro').val();
+        let email = $('#emailAdminPro').val();
+        let phone = $('#phoneAdminPro').val();
+
+        let provinceId = $('#provinceAdminPro').val();
+        let districtId = $('#districtAdminPro').val();
+        let wardId = $('#wardAdminPro').val();
+        let address = $('#addressAdminPro').val();
+
+        let province_name;
+        let district_name;
+        let ward_name;
+
+        $.each(provinces.results, (i, item) => {
+            if (item.province_id === provinceId) {
+                province_name = item.province_name;
+            }
+        });
+
+        $.each(districts.results, (i, district) => {
+            if (district.district_id === districtId) {
+                district_name = district.district_name;
+            }
+        });
+
+        $.each(wards.results, (i, ward) => {
+            if (ward.ward_id === wardId) {
+                ward_name = ward.ward_name;
+            }
+        });
+
+        let locationRegion = new LocationRegion(0, provinceId, province_name, districtId, district_name, wardId, ward_name, address);
+
+        let user = {
+            id,
+            username,
+            fullName,
+            password,
+            email,
+            phone,
+            avatar,
+            locationRegion
+        }
+
+        $.ajax({
+            headers: {
+                "accept": "application/json",
+                "content-type": "application/json"
+            },
+            type: "POST",
+            url: "http://localhost:8080/api/users/edit-admin",
+            data: JSON.stringify(user)
+        })
+            .done(() => {
+
+                $("#mdProfileAdmin .modal-body .modal-alert-danger").addClass('hide').removeClass('show');
+
+                $('#usernameAdminPro').attr("readonly", "");
+                $('#fullNameAdminPro').attr("readonly", "");
+                $('#emailAdminPro').attr("readonly", "");
+                $('#phoneAdminPro').attr("readonly", "");
+                $('#provinceAdminPro').attr("disabled", "");
+                $('#districtAdminPro').attr("disabled", "");
+                $('#wardAdminPro').attr("disabled", "");
+                $('#addressAdminPro').attr("readonly", "");
+
+                $("#mdProfileAdmin").modal('hide');
+
+                Swal.fire({
+                    // position: 'top-end',
+                    icon: 'success',
+                    title: 'Edit Admin Successfully',
+                    showConfirmButton: false,
+                    timer: 2000
+                })
+
+                $('.edit').removeClass('show').addClass('hide');
+
+
+                $(".profile-admin").click();
+            })
+            .fail((jqXHR) => {
+                console.log(jqXHR);
+
+                $('#mdCreate .modal-body .modal-alert-danger').fadeIn(1000).empty().addClass('show').removeClass('hide').fadeOut(6000);
+
+                if (jqXHR.responseJSON.message) {
+                    let message = jqXHR.responseJSON.message;
+
+                    let str = `<div id="message-error" class="displayErr">
+                                  <label class="error" for="message">${message}</label>
+                                  <i class="fa fa-times closeMess" aria-hidden="true"></i>
+                               </div>`;
+
+                    $("#mdCreate .modal-body .modal-alert-danger").prepend(str);
+                    closeMessage();
+
+                } else if (jqXHR.responseJSON) {
+                    $.each(jqXHR.responseJSON, (key, item) => {
+                        let str = `<div id="${key}-error" class="displayErr">
+                                            <label class="error" for="${key}De">${item}</label>
+                                            <i class="fa fa-times closeErr" aria-hidden="true"></i>
+                                        </div>`;
+                        $("#" + key).addClass("error");
+
+                        $("#mdCreate .modal-body .modal-alert-danger").prepend(str);
+                        $('#transactionAmountDep').val("");
+                        closeError(key);
+
+                    })
+                }
+            });
+    }
+
+    // Edit form validate
+    $("#mdProfileAdmin").on('hidden.bs.modal', () => {
+        $("#mdProfileAdmin .modal-alert-danger").removeClass("show").addClass("hide");
+        $("#frmProfileAdmin").validate().resetForm();
+    })
+
+    $("#frmProfileAdmin").validate({
+        rules: {
+            fullNameAdminPro: {
+                required: true,
+                minlength: 5,
+                maxlength: 30
+            },
+            emailAdminPro: {
+                required: true,
+                minlength: 5,
+                maxlength: 30,
+                valid_email: true
+            },
+            usernameAdminPro: {
+                required: true,
+                minlength: 8,
+                maxlength: 20
+            },
+            phoneAdminPro: {
+                required: true,
+                minlength: 8,
+                maxlength: 20,
+                isPhone: true
+            },
+            addressAdminPro: {
+                minlength: 5,
+                maxlength: 50
+            }
+        },
+        messages: {
+            fullNameAdminPro: {
+                required: "Please enter full name",
+                minlength: "Minimum name length is 5",
+                maxlength: "The maximum name length is 30"
+            },
+            emailAdminPro: {
+                required: "Please enter email",
+                minlength: "Minimum email length is 5",
+                maxlength: "The maximum email length is 30"
+            },
+            usernameAdminPro: {
+                required: "Please enter username",
+                minlength: "Minimum username length is 8",
+                maxlength: "The maximum username length is 20"
+            },
+            phoneAdminPro: {
+                required: "Please enter your phone",
+                minlength: "Minimum phone length is 9",
+                maxlength: "The maximum phone length is 10",
+            },
+            addressAdminPro: {
+                minlength: "Minimum address length is 5",
+                maxlength: "The maximum address length is 50"
+            }
+        },
+        errorLabelContainer: "#mdProfileAdmin .modal-alert-danger",
+        errorPlacement: function (error, element) {
+            error.appendTo("#mdProfileAdmin .modal-alert-danger");
+        },
+        showErrors: function (errorMap, errorList) {
+            if (this.numberOfInvalids() > 0) {
+                $("#mdProfileAdmin .modal-alert-danger").removeClass("hide").addClass("show");
+            } else {
+                $("#mdProfileAdmin .modal-alert-danger").removeClass("show").addClass("hide").empty();
+                $("#frmProfileAdmin input.error").removeClass("error");
+            }
+            this.defaultShowErrors();
+        },
+        submitHandler: function () {
+            doEditAdmin();
+        }
+    });
+
+    let btnEditAdmin = $("#btnEdit");
+    btnEditAdmin.on('click', () => {
+        $("#frmProfileAdmin").submit();
+    });
+    // end edit
+
+    // let location;
+    let provinces = [];
+    let districts = [];
+    let wards = [];
+
+    // API Province
+    function getAllProvinces() {
+        return $.ajax({
+            headers: {
+                "accept": "application/json",
+                "content-type": "application/json"
+            },
+            type: "GET",
+            url: "https://vapi.vnappmob.com/api/province/"
+        })
+            .done((data) => {
+                $.each(data.results, (i, item) => {
+                    let str = `<option value="${item.province_id}">${item.province_name}</option>`;
+                    // $("#provinceAdminCreate").append(str);
+                    $("#provinceAdminPro").append(str);
+
+                });
+                provinces = data;
+            })
+            .fail((jqXHR) => {
+
+            })
+    }
+
+    function getAllDistrictsByProvinceId(provinceId) {
+        return $.ajax({
+            headers: {
+                "accept": "application/json",
+                "content-type": "application/json"
+            },
+            type: "GET",
+            url: "https://vapi.vnappmob.com/api/province/district/" + provinceId
+        })
+            .done((data) => {
+                if (data.results.length !== 0) {
+                    // $('#districtAdminCreate').empty();
+                    $('#districtAdminPro').empty();
+
+                    $.each(data.results, (i, item) => {
+                        let str = `<option value="${item.district_id}">${item.district_name}</option>`;
+                        // $("#districtAdminCreate").append(str);
+                        $("#districtAdminPro").append(str);
+                    });
+                    districts = data;
+                } else {
+                    Swal.fire({
+                        title: "Province invalid!",
+                        icon: 'question',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                }
+            })
+            .fail((jqXHR) => {
+
+            })
+    }
+
+
+    function getAllWardsByDistrictId(districtId) {
+        return $.ajax({
+            headers: {
+                "accept": "application/json",
+                "content-type": "application/json"
+            },
+            type: "GET",
+            url: "https://vapi.vnappmob.com/api/province/ward/" + districtId
+        })
+            .done((data) => {
+                if (data.results.length !== 0) {
+                    // $('#wardAdminCreate').empty();
+                    $('#wardAdminPro').empty();
+
+                    $.each(data.results, (i, item) => {
+                        let str = `<option value="${item.ward_id}">${item.ward_name}</option>`;
+                        // $("#wardAdminCreate").append(str);
+                        $("#wardAdminPro").append(str);
+                    });
+                    wards = data;
+                } else {
+                    Swal.fire({
+                        title: "District invalid!",
+                        icon: 'question',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                }
+
+            })
+            .fail((jqXHR) => {
+
+            })
+    }
+
+    function selectAddressToCreate() {
+        getAllProvinces().then(() => {
+            let provinceId = $("#provinceAdminCreate").val();
+
+            getAllDistrictsByProvinceId(provinceId).then(() => {
+
+                let districtId = $("#districtAdminCreate").val();
+
+                getAllWardsByDistrictId(districtId);
+            });
+        })
+    }
+
+    function selectAddressToUpdate() {
+        getAllProvinces().then(() => {
+            let provinceId = $("#provinceAdminPro").val();
+
+            getAllDistrictsByProvinceId(provinceId).then(() => {
+
+                let districtId = $("#districtAdminPro").val();
+
+                getAllWardsByDistrictId(districtId);
+            });
+        })
+    }
+
+    function changeLocationEdit() {
+        $("#provinceAdminPro").change(() => {
+
+            let provinceId = $("#provinceAdminPro").val();
+
+            getAllDistrictsByProvinceId(provinceId).then(() => {
+
+                let districtId = $("#districtAdminPro").val();
+
+                getAllWardsByDistrictId(districtId);
+            })
+        })
+
+        $("#districtAdminPro").change(() => {
+            let districtId = $("#districtAdminPro").val();
+
+            getAllWardsByDistrictId(districtId);
+        })
+    }
+    // END API province
+
+    function closeMessage() {
+        $('.closeMess').on('click', () => {
+            $('.modal-alert-danger').empty().removeClass('show').addClass('hide');
+        })
+    }
+
+    function closeError(key) {
+        let btnClose = $('.closeErr');
+        btnClose.on('click', () => {
+            $('.modal-alert-danger').empty().removeClass('show').addClass('hide');
+        })
+    }
+
+    // validate Email
+    $.validator.addMethod('valid_email', function (value) {
+        const regex = /^[a-z0-9]+([-._][a-z0-9]+)*@([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{1,5}$/;
+        return value.trim().match(regex);
+    }, "(Email invalid!Ex: abc@def.xyz)");
+
+    // validate Phone
+    $.validator.addMethod('isPhone', function (value) {
+        const regex = /^(0?)(3[2-9]|5[6|8|9]|7[0|6-9]|8[0-6|8|9]|9[0-4|6-9])[0-9]{7}$/;
+        return value.trim().match(regex);
+    }, "Phone number format in Vietnam");
 </script>
 </body>
 

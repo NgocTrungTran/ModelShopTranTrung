@@ -14,4 +14,7 @@ public interface ProductService extends IGeneralService<Product> {
 
     List<ProductDTO> findAllProductsDTO();
 
+    List<ProductDTO> findAllProductsDTOTrash();
+
+    Boolean existsByTitle(String title);
 }

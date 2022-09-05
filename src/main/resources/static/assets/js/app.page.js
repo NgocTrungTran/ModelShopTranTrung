@@ -6,6 +6,7 @@ class App {
     static BASE_URL_USER_TRASH = this.BASE_URL_USER + "/trash"
 
     static BASE_URL_PRODUCT = this.BASE_URL + "/products";
+    static BASE_URL_PRODUCT_TRASH = this.BASE_URL_PRODUCT + "/trash";
 
     static BASE_URL_CLOUD_IMAGE = "https://res.cloudinary.com/trantrung/image/upload";
     static BASE_URL_CLOUD_VIDEO = "https://res.cloudinary.com/trantrung/video/upload";

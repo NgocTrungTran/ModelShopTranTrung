@@ -721,6 +721,7 @@
                 $("#phoneAdminPro").val(user.phone);
                 $("#provinceAdminPro").val(user.locationRegion.provinceId);
 
+
                 let avatar = user.avatar;
                 let str = `<img id="avatarAdminPro" class="rounded-circle mx-auto" width="250" height="250"
                                              src="/images/avatar/${avatar}" alt="Image Description">`;
@@ -1437,7 +1438,6 @@
 
         handleShowModal();
 
-        // drawFooter(item);
     }
 
     // check data input number
@@ -1639,7 +1639,6 @@
 
     function changeLocationEdit() {
         $("#provinceAdminPro").change(() => {
-            console.log("chiiiii");
 
             let provinceId = $("#provinceAdminPro").val();
 

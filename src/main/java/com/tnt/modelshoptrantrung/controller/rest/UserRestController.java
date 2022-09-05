@@ -336,8 +336,7 @@ public class UserRestController {
         user.setDeleted ( true);
         userService.save ( user );
 
-        User userBlocked = userService.findById ( user.getId () ).get ();
-        return new ResponseEntity<>(userBlocked.toUserDTO (), HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PatchMapping("/restore")
