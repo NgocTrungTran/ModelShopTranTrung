@@ -35,7 +35,7 @@ public class Product extends BaseEntity {
 
     private Long view = 0L;
 
-    @Column(precision = 12, scale = 0, updatable = false)
+    @Column(precision = 12, scale = 0)
     private BigDecimal price;
 
     @ManyToOne

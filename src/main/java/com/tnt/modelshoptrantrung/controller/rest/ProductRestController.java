@@ -5,6 +5,7 @@ import com.tnt.modelshoptrantrung.exception.DataInputException;
 import com.tnt.modelshoptrantrung.exception.DataOutputException;
 import com.tnt.modelshoptrantrung.exception.ResourceNotFoundException;
 import com.tnt.modelshoptrantrung.model.*;
+import com.tnt.modelshoptrantrung.model.dto.DepositDTO;
 import com.tnt.modelshoptrantrung.model.dto.ProductDTO;
 import com.tnt.modelshoptrantrung.service.category.CategoryService;
 import com.tnt.modelshoptrantrung.service.product.ProductService;
@@ -82,6 +83,8 @@ public class ProductRestController {
     @PostMapping("/create")
     @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<?> doAddProduct(@Validated @RequestBody ProductDTO productDTO, BindingResult bindingResult  ) {
+        new ProductDTO ().validate(productDTO, bindingResult);
+
         if (bindingResult.hasErrors()) {
             return appUtil.mapErrorToResponse(bindingResult);
         }

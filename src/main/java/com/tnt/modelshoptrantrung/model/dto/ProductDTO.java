@@ -7,7 +7,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import org.springframework.validation.Errors;
+import org.springframework.validation.Validator;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import java.math.BigDecimal;
 
 @NoArgsConstructor
@@ -15,15 +19,18 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @Accessors(chain = true)
-public class ProductDTO {
+public class ProductDTO implements Validator {
     private Long id;
 
+//    @NotBlank(message = "Title not null")
     private String title;
 
     private String slug;
 
+//    @NotBlank(message = "Image not null")
     private String image;
 
+//    @NotBlank(message = "Price not null")
     private BigDecimal price;
 
     private Long sold;
@@ -56,5 +63,42 @@ public class ProductDTO {
                 .setCreatedBy ( createdBy )
                 ;
 
+    }
+
+    @Override
+    public boolean supports(Class<?> clazz) {
+        return ProductDTO.class.isAssignableFrom ( clazz );
+    }
+
+
+    @Override
+    public void validate(Object o, Errors errors) {
+        ProductDTO productDTO = (ProductDTO) o;
+        String price = productDTO.getPrice().toString();
+
+
+        if (!com.tnt.modelshoptrantrung.util.Validator.isNumberValid(price)) {
+
+            if (price == null || price.equals("")) {
+                errors.rejectValue("price", "400", "Price not null!");
+            } else {
+                errors.rejectValue("price", "400", "Price invalid!");
+            }
+
+        } else {
+            if (price.length() > 9) {
+                errors.rejectValue("price", "400", "Max price is 100.000.000đ!");
+            } else {
+
+                long validPrice = Long.parseLong(price);
+                if (validPrice < 99999) {
+                    errors.rejectValue("price", "400", "Min price is 100.000đ!");
+                }
+
+                if (validPrice > 100000000) {
+                    errors.rejectValue("price", "400", "Max price is 100.000.000đ!");
+                }
+            }
+        }
     }
 }

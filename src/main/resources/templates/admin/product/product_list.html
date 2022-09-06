@@ -6,6 +6,12 @@
     <title>Model Shop</title>
     <th:block th:replace="/layout/head :: head"/>
     <link rel="stylesheet" href="/assets/css/productA.css">
+    <style>
+        #createErr, #editErr {
+            display: flex;
+            flex-direction: column;
+        }
+    </style>
 </head>
 
 <body class="footer-offset">
@@ -130,7 +136,7 @@
 
     function init() {
         getAllProducts();
-        // selectAddressToUpdate();
+        // handleShowModalCreateProduct();
     }
     init();
 
@@ -302,13 +308,18 @@
         let slug = title;
         let image = $('#imageCreate').val();
         let price = +$('#priceCreate').val();
+        let sold = 0;
+        let viewed = 0;
         let createByAdmin = $("#usernameAdmin").val();
         let categoryTitle = $('#categoryCreate').val();
         let category = new Category(0, categoryTitle);
         console.log("ok" + createByAdmin);
 
-        product = new Product(0, title, slug, image, price, createByAdmin, category )
+        product = new Product(0, title, slug, image, price, sold, viewed, createByAdmin, category )
+        // let product =  new Product(id, title, slug, image, price, sold, view, createBy, category );
 
+
+        console.log(product);
         $.ajax({
             headers: {
                 "accept": "application/json",
@@ -318,12 +329,43 @@
             url: "http://localhost:8080/api/products/create",
             data: JSON.stringify(product)
         })
-            .done(() => {
-
+            .done((data) => {
+                product = data;
                 $('#frmCreate')[0].reset();
                 $("#mdCreate .modal-body .modal-alert-danger").addClass('hide').removeClass('show');
                 $("#mdCreate").modal('hide');
 
+                let str = `
+                        <tr id="tr_${product.id}">
+                            <td>
+                              <span class="d-block h5 mb-0">${product.title}</span>
+                            </td>
+                            <td>${product.category.title}</td>
+                            <td class="text-end">
+                              ${formatCash(product.price)}
+                            </td>
+                            <td class="text-center">
+                                ${product.sold}
+                            </td>
+                            <td class="text-center">
+                                <img src="/images/product/${product.image}" alt="image">
+                            </td>
+                            <td class="text-center">
+                                <button class="btn btn-sm btn-outline-success update" data-id="${product.id}" data-bs-toggle="tooltip"
+                                                data-bs-placement="top" data-bs-title="Update">
+                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i> Update
+                                </button>
+
+                                <button class="btn btn-sm btn-outline-danger remove" data-id="${product.id}" data-bs-toggle="tooltip"
+                                                data-bs-placement="top" data-bs-title="Remove">
+                                    <i class="fa fa-trash-o" aria-hidden="true"></i> Remove
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+
+                $("#table-product tbody").prepend(str);
+                handleShowModal();
                 Swal.fire({
                     // position: 'top-end',
                     icon: 'success',
@@ -331,6 +373,8 @@
                     showConfirmButton: false,
                     timer: 1500
                 })
+
+
             })
             .fail((jqXHR) => {
                 console.log(jqXHR);
@@ -364,14 +408,78 @@
                 }
             });
     }
+    // create form create
+    $("#mdCreate").on('hidden.bs.modal', () => {
+        $("#mdCreate .modal-alert-danger").removeClass("show").addClass("hide");
+        $("#frmCreate").validate().resetForm();
+    })
+
+    $("#frmCreate").validate({
+        rules: {
+            titleCreate: {
+                required: true,
+                minlength: 10,
+                maxlength: 100
+            },
+            imageCreate: {
+                required: true,
+            },
+            priceCreate: {
+                required: true,
+                minlength: 6,
+                maxlength: 8,
+                isNumberWithSpace: true,
+            },
+            categoryCreate: {
+                required: true,
+                minlength: 5,
+                maxlength: 50
+            }
+        },
+        messages: {
+            titleCreate: {
+                required: "Please enter title",
+                minlength: "Minimum title length is 10",
+                maxlength: "The maximum title length is 100"
+            },
+            imageCreate: {
+                required: "Please enter image",
+            },
+            priceCreate: {
+                required: "Please enter price",
+                minlength: "Minimum price is 100.000 VND",
+                maxlength: "Maximum price is 100.000.000 VND",
+            },
+            categoryCreate: {
+                required: "Please enter category",
+                minlength: "Minimum category length is 5",
+                maxlength: "The maximum category length is 50"
+            }
+        },
+        errorLabelContainer: "#mdCreate .modal-alert-danger",
+        errorPlacement: function (error, element) {
+            error.appendTo("#mdCreate .modal-alert-danger");
+        },
+        showErrors: function (errorMap, errorList) {
+            if (this.numberOfInvalids() > 0) {
+                $("#mdCreate .modal-alert-danger").removeClass("hide").addClass("show");
+            } else {
+                $("#mdCreate .modal-alert-danger").removeClass("show").addClass("hide").empty();
+                $("#frmCreate input.error").removeClass("error");
+            }
+            this.defaultShowErrors();
+        },
+        submitHandler: function () {
+            doCreateProduct();
+        }
+    });
 
     let btnCreateProduct = $("#btnCreate");
     btnCreateProduct.on('click', () => {
-        // $("#frmCreate").submit();
-        doCreateProduct();
+        $("#frmCreate").submit();
     });
 
-    // remove user
+    // remove product
     function handleShowRemove() {
 
         let btnRemove = $(".remove");
@@ -529,10 +637,76 @@
                 }
             });
     }
+
+    // Edit form create
+    $("#mdEdit").on('hidden.bs.modal', () => {
+        $("#mdEdit .modal-alert-danger").removeClass("show").addClass("hide");
+        $("#frmEditProduct").validate().resetForm();
+    })
+
+    $("#frmEditProduct").validate({
+        rules: {
+            titleEdit: {
+                required: true,
+                minlength: 10,
+                maxlength: 100
+            },
+            imageEdit: {
+                required: true,
+            },
+            priceEdit: {
+                required: true,
+                minlength: 6,
+                maxlength: 8,
+                isNumberWithSpace: true
+            },
+            categoryEdit: {
+                required: true,
+                minlength: 5,
+                maxlength: 50
+            }
+        },
+        messages: {
+            titleEdit: {
+                required: "Please enter title",
+                minlength: "Minimum title length is 10",
+                maxlength: "The maximum title length is 100"
+            },
+            imageEdit: {
+                required: "Please enter image",
+            },
+            priceEdit: {
+                required: "Please enter price",
+                minlength: "Minimum price is 100.000 VND",
+                maxlength: "Maximum price is 100.000.000 VND",
+                isNumberWithSpace: true
+            },
+            categoryEdit: {
+                required: "Please enter category",
+                minlength: "Minimum category length is 5",
+                maxlength: "The maximum category length is 50"
+            }
+        },
+        errorLabelContainer: "#mdEdit .modal-alert-danger",
+        errorPlacement: function (error, element) {
+            error.appendTo("#mdEdit .modal-alert-danger");
+        },
+        showErrors: function (errorMap, errorList) {
+            if (this.numberOfInvalids() > 0) {
+                $("#mdEdit .modal-alert-danger").removeClass("hide").addClass("show");
+            } else {
+                $("#mdEdit .modal-alert-danger").removeClass("show").addClass("hide").empty();
+                $("#frmEditProduct input.error").removeClass("error");
+            }
+            this.defaultShowErrors();
+        },
+        submitHandler: function () {
+            doEditProduct();
+        }
+    });
     let btnEditProduct = $("#btnEditProduct");
     btnEditProduct.on('click', () => {
-        doEditProduct();
-        // $("#frmProfileAdmin").submit();
+        $("#frmEditProduct").submit();
     });
 
     // format money
@@ -1031,6 +1205,10 @@
             $('.modal-alert-danger').empty().removeClass('show').addClass('hide');
         })
     }
+    // check data input number
+    $.validator.addMethod("isNumberWithSpace", function (value, element) {
+        return this.optional(element) || /^[-+]?\s*[0-9\s]+\s*$/i.test(value);
+    }, "(Please enter number)");
 
     // validate Email
     $.validator.addMethod('valid_email', function (value) {

@@ -27,6 +27,9 @@ public class Validator implements IValidator{
         return slug.toLowerCase( Locale.ENGLISH).replaceAll("-{2,}","-").replaceAll("^-|-$","");
     }
 
+    public static boolean isNumberValid(String number) {
+        return Pattern.compile ( NUMBER_REGEX ).matcher ( number ).matches ();
+    }
     public static boolean isLetterWithoutNumberValid(String name) {
         return Pattern.compile(LETTER_WITHOUT_NUMBER_REGEX).matcher(name).matches();
     }
